@@ -1,0 +1,1 @@
+This directory is for back-end scripts such as .js and .php files

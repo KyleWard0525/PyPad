@@ -1,0 +1,1 @@
+This directory is for icons, logos, and any other images the site may use
