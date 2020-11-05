@@ -7,9 +7,9 @@ from flask import render_template
 #Create flask app
 app = Flask(__name__)
 
-#Create an app route to serve the index.html page
+#Create an app route to serve the note_list.html page
 @app.route("/note_list")
-def index():
+def note_list():
     return render_template("note_list.html")
 
 
