@@ -4,3 +4,9 @@ body
     color: white;
     background: black;
 }
+h1
+{
+    color: white;
+    background: violet;
+    margin: 120px;
+}
