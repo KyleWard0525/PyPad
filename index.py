@@ -1,15 +1,15 @@
 # This is the flask python file that will be used to control server-side operations
-import os                 # os is used to get environment variables IP & PORT
-from flask import Flask   # Flask is the web app that we will customize
+import os
+from flask import Flask
 from flask import render_template
 
 #Create flask app
 app = Flask(__name__)
 
 #Create an app route to serve the index.html page
-@app.route('/index')
+@app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
 
 #Run the app
