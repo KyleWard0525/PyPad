@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="PyPad Literary Development">
+		<link rel="shortcut icon" type="image/png" href="../images/icon.png">
+		<title>Create Account</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
+	</head>
+	
+	<body>
+       <nav>
+			<!-- Navigation bar -->
+		<nav> 
+		<a href="{{url_for('index')}}"><u>Home</u></a> ||
+		<a href="{{url_for('get_notes')}}"><u>My notes</u></a> ||
+		<a href="{{url_for('new_note')}}"><u>Create new note</u></a> ||
+		</nav>
+       </nav>
+	   
+	   <!-- Sign-up form -->
+	   <form action="new" method="post">
+           <p><label>Name </label></p><input type="text" name="user_name"/>
+            <p><label>Email </label></p><input type="text" name="user_email"/>
+			<p><label>Password </label></p><input type="password" name="user_password"/>
+            <p><input type="submit" value="Create account"/></p>
+        </form>
+	   
+	   
+	   </body>
