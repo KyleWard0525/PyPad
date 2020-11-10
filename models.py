@@ -32,9 +32,3 @@ class User(db.Model):
         print("Name: " + str(self.name))
         print("Email: " + str(self.email))
         print("Password: " + str(self.password))
-
-def main():
-    ted = User("ted", "ted@gmail.com", "ted's password")
-    ted.toString()
-
-main()
