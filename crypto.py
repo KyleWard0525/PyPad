@@ -3,7 +3,6 @@ import os
 
 class Crypto:
 
-
     #Creates or reads encryption key
     def getKey(self):
         #Generate new key if none exists
@@ -13,7 +12,7 @@ class Crypto:
             key_file.write(key)
 
             #Hide key file
-            os.system("atrrib +h crypto.key")
+            os.system("atrrib +H crypto.key")
             print("New key generated!")
             return key
         
@@ -30,7 +29,6 @@ class Crypto:
         self.key = self.getKey()
 
     
-
     #Encrypt data
     def encrypt(self, data):
         #Create Fernet object
