@@ -22,7 +22,7 @@ class User(db.Model):
 
     def __init__(self, name, email, password):
         self.name = name
-        self.email = email
+        self.email = crypt.encrypt(email)
         self.password = crypt.encrypt(password)
 
     def toString(self):
