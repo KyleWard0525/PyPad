@@ -13,14 +13,12 @@ class Crypto:
 
             #Hide key file
             os.system("atrrib +H crypto.key")
-            print("New key generated!")
             return key
         
         #Read in key from file
         else:
             key_file = open("crypto.key", "rb")
             key = key_file.read()
-            print("Key read in from file!")
             return key
 
 
