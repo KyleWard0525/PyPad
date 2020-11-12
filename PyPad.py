@@ -83,14 +83,14 @@ def get_note(note_id):
 def create_account():
     #Check request type
     if request.method == "POST":
-        name = request.form['name']
+        user_name = request.form['name']
         email = request.form['email']
         pw = request.form['pw']
 
         #Encrypt data and create user object
         email = crypt.encrypt(email)
         pw = crypt.encrypt(pw)
-        user = User(name,email,pw)
+        user = User(user_name,email,pw)
 
         #Check if user email already exists
         if db.session.query(User).filter_by(email=email).scalar() is None:
