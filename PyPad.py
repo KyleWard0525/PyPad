@@ -6,15 +6,31 @@ from flask import Flask   # Flask is the web app that we will customize
 from flask import render_template
 from flask import request
 from flask import redirect, url_for
+from database import db
+from models import Note as Note
+from models import User as User
+from crypto import Crypto
 
 
 app = Flask(__name__)
 
-notes = {1: {'title': 'First note', 'text': 'This is my first note', 'date': '10-1-2020'},
-         2: {'title': 'Second note', 'text': 'This is my second note', 'date': '10-2-2020'},
-         3: {'title': 'Third note', 'text': 'This is my third note', 'date': '10-3-2020'}
-         }
+crypt = Crypto() #For encrypting/decrypting data
 
+"""
+Configure database connection
+"""
+#Create database file
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+
+#Disable tracking
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+#Connect the database object to the flask app
+db.init_app(app)
+
+#Setup models
+with app.app_context():
+    db.create_all() #run under app context
 
 # @app.route is a decorator. It gives the function "index" special powers.
 # In this case it makes it so anyone going to "your-url/" makes this function
@@ -61,6 +77,35 @@ def get_note(note_id):
 
     a_user = {'name': 'Yuanming Song', 'email':'ysong21@uncc.edu'}
     return render_template('note.html', note=notes[int(note_id)], user = a_user)
+
+#Create account page
+@app.route('/create_account', methods=["GET", "POST"])
+def create_account():
+    #Check request type
+    if request.method == "POST":
+        name = request.form['name']
+        email = request.form['email']
+        pw = request.form['pw']
+
+        #Encrypt data and create user object
+        email = crypt.encrypt(email)
+        pw = crypt.encrypt(pw)
+        user = User(name,email,pw)
+
+        #Check if user email already exists
+        if db.session.query(User).filter_by(email=email).scalar() is None:
+            return render_template("status.html")
+        else:
+            #Add user to databse
+            db.session.add(user)
+            db.session.commit()
+            return render_template("status.html")
+
+        return 'bad'
+
+        
+        
+
 
 app.run(host=os.getenv('IP', '127.0.0.1'),port=int(os.getenv('PORT', 5000)),debug=True)
 
