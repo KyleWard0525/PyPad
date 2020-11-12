@@ -14,5 +14,10 @@ h1
 a
 {
     padding: 30px 30px;
-    background: violet;
+    background: purple;
+}
+
+footer
+{
+    background: purple;
 }
