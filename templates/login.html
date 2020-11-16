@@ -11,7 +11,9 @@
 	<body>
 	<a href={{url_for('index')}}>Home</a> ||
 	<a href={{url_for('createAccount')}}>Create Account</a> ||
-	<a href="{{url_for('login')}}">Login</a>
+	<a href="{{url_for('login')}}">Login</a> ||
+	<a href="{{url_for('get_notes')}}"><u>My notes</u></a> ||
+	<a href="{{url_for('new_note')}}"><u>Create new note</u></a> ||
 	<main>
 		<h1><b>Please fill out login information</b></h1>
         <form action="login" method="get">
