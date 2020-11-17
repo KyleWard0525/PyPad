@@ -13,10 +13,12 @@
 	<a>Create Account</a> ||
 	<a>Login</a>
 	<main>
-		<h1><b>Home Page</b></h1>
-		<br>
-		<br>
-		<br>
+		<nav>
+		<a href="{{ url_for('index') }}"> Home</a> ||
+		<a href="{{ url_for('get_notes') }}"> My Notes</a> ||
+		<a href="{{ url_for('new_note') }}"> Add Note</a> ||
+		</nav>
+
 		<h1>Welcome to PyPad</h1>
 		<p>Feel free to use this website. If you are new to PyPad, then click on 'Create Account' to set up. If not a
 			new user, then login into your account.
