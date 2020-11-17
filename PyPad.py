@@ -89,11 +89,9 @@ def createAccount():
     
     #Check request type
     if request.method == "POST":
-        user_name = request.form['username']
+        username = request.form['username']
         email = request.form['email']
         pw = request.form['password']
-
-        print(utils.checkPasswordStrength(pw))
 
         #Check password requirements
         if not utils.checkPasswordStrength(pw) == "OK":
@@ -102,17 +100,17 @@ def createAccount():
         #Encrypt data and create user object
         email = crypt.encrypt(email)
         pw = crypt.encrypt(pw)
-        user = User(user_name,email,pw)
+        user = User(name=username,email=email,password=pw)
 
         
         #Check if user email already exists
         if db.session.query(User).filter_by(email=email).scalar() is None:
-            return render_template("status.html")
+            return render_template("createAccount.html", error="Email already in use!")
         else:
             #Add user to databse
             db.session.add(user)
             db.session.commit()
-            return render_template("status.html")
+            return redirect("status.html", status="Account Created!")
         
 
     return render_template("createAccount.html", error="")
