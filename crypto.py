@@ -33,7 +33,7 @@ class Crypto:
         f = Fernet(self.key)
 
         #Return encrypted data
-        return f.encrypt(str.encode(data))
+        return f.encrypt(str.encode(str(data)))
 
     #Decrypt data
     def decrypt(self, data):
