@@ -13,9 +13,13 @@
            <!--  add navigation links -->
 			<!-- Navigation bar -->
 		<nav> 
-		<a href="{{url_for('index')}}"><u>Home</u></a>
+		<a href="{{url_for('index')}}">Home</a> ||
+		<a href="{{url_for('createAccount')}}">Create Account</a> ||
+		<a href="{{url_for('login')}}">Login</a> ||
+		<a href="{{url_for('get_notes')}}"><u>My notes</u></a> ||
+		<a href="{{url_for('new_note')}}"><u>Create new note</u></a>
 		</nav>
 		
-		
+		<h1 class="status_msg">{{status}}</h1>
 		
 		</body>
