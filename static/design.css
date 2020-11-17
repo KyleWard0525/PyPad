@@ -21,3 +21,9 @@ footer
 {
     background: purple;
 }
+
+h1.error {
+	color: red;
+	background: purple;
+	margin: auto;
+}
