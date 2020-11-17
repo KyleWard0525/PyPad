@@ -2,6 +2,7 @@
 
 # imports
 import os                 # os is used to get environment variables IP & PORT
+import sys
 from flask import Flask   # Flask is the web app that we will customize
 from flask import render_template
 from flask import request
@@ -10,6 +11,11 @@ from database import db
 from models import Note as Note
 from models import User as User
 from crypto import Crypto
+
+#Load /scripts into sys path
+sys.path.insert(1, "/scripts")
+
+from scripts import utils
 
 app = Flask(__name__)
 
@@ -77,42 +83,6 @@ def new_note():
             a_user = db.session.query(User).filter_by(email='ysong21@uncc.edu').one()
             return render_template('new.html', user=a_user)
 
-@app.route('/notes/edit/<note_id>', methods=['GET', 'POST'])
-def update_note(note_id):
-    # check method used for request
-    if request.method == 'POST':
-        # get title data
-        title = request.form['title']
-        # get note data
-        text = request.form['noteText']
-        note = db.session.query(Note).filter_by(id=note_id).one()
-        # update note data
-        note.title = title
-        note.text = text
-        # update note in DB
-        db.session.add(note)
-        db.session.commit()
-
-        return redirect(url_for('get_notes'))
-    else:
-        # GET request - show note form to edit note
-        # retrieve user from database
-        a_user = db.session.query(User).filter_by(email='ysong21@uncc.edu').one()
-
-        # retrieve note from database
-        my_notes = db.session.query(Note).filter_by(id=note_id).one()
-
-        return render_template('new.html', note=my_notes, user = a_user)
-
-@app.route('/notes/delete/<note_id>', methods=['POST'])
-def delete_note(note_id):
-    # retrieve note from database
-    my_note = db.session.query(Note).filter_by(id=note_id).one()
-    db.session.delete(my_note)
-    db.session.commit()
-
-    return redirect(url_for('get_notes'))
-
 #Create account page
 @app.route('/createAccount', methods=["GET", "POST"])
 def createAccount():
@@ -123,11 +93,18 @@ def createAccount():
         email = request.form['email']
         pw = request.form['password']
 
+        print(utils.checkPasswordStrength(pw))
+
+        #Check password requirements
+        if not utils.checkPasswordStrength(pw) == "OK":
+            return render_template("createAccount.html", error=utils.checkPasswordStrength(pw))
+
         #Encrypt data and create user object
         email = crypt.encrypt(email)
         pw = crypt.encrypt(pw)
         user = User(user_name,email,pw)
 
+        
         #Check if user email already exists
         if db.session.query(User).filter_by(email=email).scalar() is None:
             return render_template("status.html")
@@ -136,8 +113,9 @@ def createAccount():
             db.session.add(user)
             db.session.commit()
             return render_template("status.html")
-    else:
-        return render_template("createAccount.html")
+        
+
+    return render_template("createAccount.html", error="")
 
 #User login
 @app.route('/login', methods=["GET", "POST"])
