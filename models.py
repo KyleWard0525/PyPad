@@ -18,7 +18,7 @@ class Note(db.Model):
 
 class User(db.Model):
     id = db.Column("id", db.Integer, primary_key=True)
-    user_name = db.Column("user_name", db.String(100))
+    user_name = db.Column("username", db.String(100))
     email = db.Column("email", db.String(100))
     password = db.Column("password", db.String(200))
 
@@ -35,11 +35,11 @@ class User(db.Model):
         print("Email: " + str(self.email))
         print("Password: " + str(self.password))
 
-class Comment(db.model):
+class Comment(db.Model):
     id = db.Column("id", db.Integer, primary_key=True)
     text = db.Column("text", db.String(100))
     date = db.Column("date", db.String(50))
-    parent_id = db.Column("id", db.Integer) #ID of note comment belongs to
+    parent_id = db.Column("parent_id", db.Integer) #ID of note comment belongs to
 
 
     def __init__(self,text,date,parent):
