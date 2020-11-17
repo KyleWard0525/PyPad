@@ -78,13 +78,14 @@ def new_note():
             return render_template('new.html', user=a_user)
 
 #Create account page
-@app.route('/create_account', methods=["GET", "POST"])
-def create_account():
+@app.route('/createAccount', methods=["GET", "POST"])
+def createAccount():
+    
     #Check request type
     if request.method == "POST":
-        user_name = request.form['name']
+        user_name = request.form['username']
         email = request.form['email']
-        pw = request.form['pw']
+        pw = request.form['password']
 
         #Encrypt data and create user object
         email = crypt.encrypt(email)
@@ -99,9 +100,14 @@ def create_account():
             db.session.add(user)
             db.session.commit()
             return render_template("status.html")
+    else:
+        return render_template("createAccount.html")
 
-        return 'bad'
+#User login
+@app.route('/login', methods=["GET", "POST"])
+def login():
 
+    return render_template("login.html")
 
 app.run(host=os.getenv('IP', '127.0.0.1'),port=int(os.getenv('PORT', 5000)),debug=True)
 
