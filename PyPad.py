@@ -11,6 +11,7 @@ from database import db
 from models import Note as Note
 from models import User as User
 from crypto import Crypto
+from datetime import date
 
 #Load /scripts into sys path
 sys.path.insert(1, "/scripts")
@@ -30,6 +31,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #Connect the database object to the flask app
 db.init_app(app)
 
+#Mock notes
+mock_notes = {
+
+    0 : {"title": "First note", "text": "First note text", "date":date.today().strftime("%m-%d-%Y")},
+    1 : {"title": "Second note", "text": "Second note text", "date":date.today().strftime("%m-%d-%Y")},
+    2 : {"title": "Third note", "text": "Third note text", "date":date.today().strftime("%m-%d-%Y")}
+    }
+
 #Setup models
 with app.app_context():
     db.create_all() #run under app context
@@ -40,23 +49,37 @@ with app.app_context():
 @app.route('/')
 @app.route('/index')
 def index():
-    a_user = db.session.query(User).filter_by(email='ysong21@uncc.edu').one()
+    #a_user = db.session.query(User).filter_by(email='ysong21@uncc.edu').one()
+    a_user = User(name="username",email="user@gmail.com",password="Password12!3:")
+    a_user.toString()
+    db.session.add(a_user)
+    db.session.commit()
+
+    print("User email: ", str(a_user.email))
+
+    db_user = db.session.query(User).filter_by(user_name=a_user.user_name).first()
+
+    print("\nUser pulled from database:\n")
+    db_user.toString()
+    print("DB User email: ", str(crypt.decrypt(db_user.email)))
 
     return render_template('index.html', user = a_user)
 
 @app.route('/notes')
 def get_notes():
 
-    a_user = db.session.query(User).filter_by(email='ysong21@uncc.edu').one()
+    #a_user = db.session.query(User).filter_by(email='ysong21@uncc.edu').one()
+    a_user = User(name="username",email="user@gmail.com",password="Password12!3:")
 
-    my_notes = db.session.query(Note).all()
+    my_notes = mock_notes
 
     return render_template('notes.html', notes=my_notes, user = a_user)
 
 @app.route('/notes/<note_id>')
 def get_note(note_id):
 
-    a_user = db.session.query(User).filter_by(email='ysong21@uncc.edu').one()
+    #a_user = db.session.query(User).filter_by(email='ysong21@uncc.edu').one()
+    a_user = User(name="username",email="user@gmail.com",password="Password12!3:")
 
     my_notes = db.session.query(Note).filter_by(id=note_id).one()
 
@@ -70,7 +93,7 @@ def new_note():
 
             text = request.form['noteText']
 
-            from datetime import date
+            
             today = date.today()
             today = today.strftime("%m-%d-%Y")
             new_record = Note(title, text, today)
@@ -102,15 +125,20 @@ def createAccount():
         pw = crypt.encrypt(pw)
         user = User(name=username,email=email,password=pw)
 
+        user.toString()
+
         
         #Check if user email already exists
-        if db.session.query(User).filter_by(email=email).scalar() is None:
+        if db.session.query(User).filter_by(email=email).first():
             return render_template("createAccount.html", error="Email already in use!")
+        #Check if username is already in use
+        elif db.session.query(User).filter_by(user_name = user.user_name).first():
+            return render_template("createAccount.html", error="Username already in use!")
         else:
             #Add user to databse
             db.session.add(user)
             db.session.commit()
-            return redirect("status.html", status="Account Created!")
+            return render_template("status.html", status="Account Created!")
         
 
     return render_template("createAccount.html", error="")
