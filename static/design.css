@@ -26,3 +26,13 @@ h1.error {
 	color: red;
 	background: purple;
 }
+
+h1.status_msg {
+	text-align: center;
+	text-decoration: underline;
+	text-transform: uppercase;
+	background: purple;
+	margin: auto;
+	padding: 5px 5px 5px 5px;
+	
+}
