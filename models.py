@@ -17,7 +17,7 @@ class Note(db.Model):
 
 class User(db.Model):
     id = db.Column("id", db.Integer, primary_key=True)
-    user_name = db.Column("username", db.String(100))
+    user_name = db.Column("name", db.String(100))
     email = db.Column("email", db.String(100))
     password = db.Column("password", db.String(200))
 
@@ -29,10 +29,11 @@ class User(db.Model):
     def toString(self):
         print("\nUser: ")
         print("----------")
-        print("ID: " + str(self.id))
-        print("User Name: " + str(self.user_name))
-        print("Email: " + str(self.email))
-        print("Password: " + str(self.password))
+        print("id: " + str(self.id))
+        print("user_name: " + str(self.user_name))
+        print("email: " + str(self.email))
+        print("password: " + str(self.password))
+        print("\n")
 
 class Comment(db.Model):
     id = db.Column("id", db.Integer, primary_key=True)
