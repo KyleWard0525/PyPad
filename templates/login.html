@@ -13,9 +13,10 @@
 	<a href="{{url_for('createAccount')}}">Create Account</a> ||
 	<a href="{{url_for('login')}}">Login</a> ||
 	<a href="{{url_for('get_notes')}}"><u>My notes</u></a> ||
-	<a href="{{url_for('new_note')}}"><u>Create new note</u></a> ||
+	<a href="{{url_for('new_note')}}"><u>Create new note</u></a>
 	<main>
-		<h1><b>Please fill out login information</b></h1>
+		<h1><b>Fill in login information</b></h1>
+		<p>If you don't have an account on PyPad, then click on 'Create Account' to create your account.</p>
         <form action="login" method="get">
             <p><label>Enter email:</label><input type="email" name="email"></p>
             <p><label>Enter password:</label><input type="text" name="password"></p>
@@ -23,7 +24,7 @@
         </form>
 	</main>
 	<footer>
-		Copyright 2020 by Python Cobra
+		Copyright 2020 by Python Cobra Software LLC. All rights reserved.
 	</footer>
 	</body>
 	</html>
