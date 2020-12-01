@@ -1,6 +1,7 @@
 import sys
 import time
 import re
+from models import User as User
 
 special_chars = "!@#$%&_=./\()*^-+{}:;<>|[]`~"
 
@@ -62,9 +63,6 @@ def checkPasswordStrength(password):
                  
 #Clear database of all users
 def wipeDatabase(db):
-    try:
-        num_deleted = db.session.query(User).delete()
-        print("Cleared " + str(num_deleted) + " users from the database.")
-        db.session.commit()
-    except:
-        db.session.rollback()
+    num_deleted = db.session.query(User).delete()
+    print("Cleared " + str(num_deleted) + " users from the database.")
+    db.session.commit()
