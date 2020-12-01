@@ -48,7 +48,7 @@ with app.app_context():
 # get called. What it returns is what is shown as the web page
 @app.route('/')
 @app.route('/index')
-def index():
+def index():    
     #a_user = db.session.query(User).filter_by(email='ysong21@uncc.edu').one()
     a_user = User(name="username",email="user@gmail.com",password="Password12!3:")
     a_user.toString()
