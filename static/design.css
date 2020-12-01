@@ -10,7 +10,15 @@ h1
 	font-family: "Courier New";
     color: white;
     background: purple;
-    margin: 80px;
+    margin: 60px;
+}
+
+h1.welcome {
+	margin-top: 80px;
+}
+
+h2.signup_prompt {
+	margin-bottom: 10px;
 }
 
 a
@@ -25,11 +33,13 @@ footer
 {
 	font-family: "Courier New";
     background: purple;
+	margin-top: 550px;
 }
 
 h1.error {
 	color: red;
 	background: purple;
+	font-family: "Courier New";
 }
 
 h1.status_msg {
@@ -39,7 +49,7 @@ h1.status_msg {
 	background: purple;
 	margin: auto;
 	padding: 5px 5px 5px 5px;
-	
+	font-family: "Courier New";
 }
 
 .ca_button {
