@@ -19,7 +19,7 @@
 	        <a href="{{url_for('new_note')}}"><u>Create new note</u></a>
        </nav>
 
-        <h1>Welcome {{user.name}} to the PyPad!</h1>
+        <h1>Welcome {{user.user_name}} to the PyPad!</h1>
 
        {% if note %}
             <form action="{{ url_for('update_note', note_id=note.id) }}" method="post">
