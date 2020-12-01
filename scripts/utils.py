@@ -60,5 +60,11 @@ def checkPasswordStrength(password):
     return reply
 
                  
-
-    
+#Clear database of all users
+def wipeDatabase(db):
+    try:
+        num_deleted = db.session.query(User).delete()
+        print("Cleared " + str(num_deleted) + " users from the database.")
+        db.session.commit()
+    except:
+        db.session.rollback()
