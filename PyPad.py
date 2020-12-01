@@ -46,23 +46,19 @@ mock_notes = {
 with app.app_context():
     db.create_all() #run under app context
 
+
+
+
+
 # @app.route is a decorator. It gives the function "index" special powers.
 # In this case it makes it so anyone going to "your-url/" makes this function
 # get called. What it returns is what is shown as the web page
 @app.route('/')
 @app.route('/index')
-def index():    
-
-    #Print out all users in the database
-    users = User.query.all()
-
-    for user in users:
-        user.toString()
-
-        if user.user_name == "Not Kyle Ward":
-            print("\nUser: Not Kyle Ward:\n")
-            print("Email: " + str(crypt.decrypt(user.email)))
-            print("Password: " + str(crypt.decrypt(user.password)))
+def index():
+    #Print number of users in database
+    user_list = User.query.all()
+    print("\nNumber of users in the database: " + str(len(user_list)) + "\n")
 
     return render_template('index.html', user = curr_user)
 
@@ -138,10 +134,8 @@ def createAccount():
         if not utils.checkPasswordStrength(pw) == "OK":
             return render_template("createAccount.html", error=utils.checkPasswordStrength(pw))
 
-        #Encrypt data and create user object
+        #create user object
         user = User(name=username,email=email,password=pw)
-
-        user.toString()
 
         
         #Check if user email already exists
@@ -168,21 +162,22 @@ def login():
 
     #User is attempting to login
     if request.method == "POST":
-        email = request.form['email']
+        username = request.form['username']
         pw = request.form['password']
 
-        #Encrypted login data and make User object
-        email = crypt.encrypt(email)
-        pw = crypt.encrypt(pw)
-        user = User(name="", email=email, password=pw)
+        #Make User object
+        user = User(name=username, email="", password=pw)
 
-        #Check email exists
-        if db.session.query(User).filter_by(email=email).first():
+        #Check user exists
+        if db.session.query(User).filter_by(user_name=username).first():
             #Check if password is correct
-            user = db.session.query(User).filter_by(email=email).one()
+            user = db.session.query(User).filter_by(user_name=username).one()
+
+            print("Entered password: " + str(pw))
+            print("Decrypted user password: " + crypt.decrypt(user.getPW()))
 
             #Passwords match
-            if user.getPW() == pw:
+            if crypt.decrypt(user.getPW()) == pw:
                 #Return to homepage
                 curr_user = user
                 return render_template("index.html", user=user)
@@ -192,7 +187,7 @@ def login():
                 return render_template("login.html", error="Incorrect password!")
         else:
             #User email not found
-            return render_template("login.html", error="Email not found!")
+            return render_template("login.html", error="User not found!")
 
     return render_template("login.html", error="")
 
