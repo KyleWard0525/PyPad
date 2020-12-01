@@ -1,24 +1,29 @@
 body
 {
+	font-family: "Courier New";
     text-align: center;
     color: white;
     background: black;
 }
 h1
 {
+	font-family: "Courier New";
     color: white;
     background: purple;
-    margin: 120px;
+    margin: 80px;
 }
 
 a
 {
+	font-family: "Courier New";
     padding: 30px 30px;
     background: purple;
+	font-size: 16px;
 }
 
 footer
 {
+	font-family: "Courier New";
     background: purple;
 }
 
@@ -36,3 +41,26 @@ h1.status_msg {
 	padding: 5px 5px 5px 5px;
 	
 }
+
+.ca_button {
+	color: white;
+	background-color: purple;
+	border-style: double;
+	display: inline-block;
+	font-size: 24px;
+	font-family: "Courier New";
+	text-align: center;
+	cursor: pointer;
+	width: 250px;
+	height: 70px;
+	margin-bottom: 30px;
+}
+
+a.login_notice {
+	padding: 1px 1px 1px 1px;
+	margin: 2px;
+	background: black;
+	color: blue;
+	display: block;
+}
+
