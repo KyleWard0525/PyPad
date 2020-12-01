@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -10,20 +9,25 @@
 		<link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
 	</head>
 	<body>
-	<a>Home</a> ||
-	<a>Create Account</a> ||
-	<a>Login</a>
+	<nav>
+		<a href="{{url_for('index')}}" class="nav_button">Home</a> ||
+		<a href="{{url_for('createAccount')}}" class="nav_button">Create Account</a> ||
+		<a href="{{url_for('login')}}" class="nav_button">Login</a> ||
+		<a href="{{url_for('get_notes')}}" class="nav_button"><u>My notes</u></a> ||
+		<a href="{{url_for('new_note')}}" class="nav_button"><u>Create new note</u></a>
+		</nav>
 	<main>
-		<h1><b>Home Page</b></h1>
-		<br />
-		<br />
-		<br />
-		<h2>Welcome to PyPad</h2>
-		<br />
-		<br />
-		<br />
-		<p>Feel free to use this website. If you are new to PyPad, then click on 'Create Account' to set up. If not a
-			new user, then login into your account.
+
+		<h1 class="welcome">Welcome {{user.user_name}} to PyPad</h1>
+		<h2 class="signup_prompt">Don't have an account? Sign up here!</h2>
+		
+		<button class="ca_button"><a href="{{url_for('createAccount')}}" style="color:white; text-decoration: none;">Create Account</a></button>
+		<a href="{{url_for('login')}}" class="login_notice">Already have an account? Login here</a>
+		
+		<p>
+			Feel free to use PyPad to create notes for any short notes for school, projects, etc. If you are new to
+			PyPad, then click on 'Create Account' to set up an account. If not a new user, then click on 'Login'
+			login into your account. You can view your notes or create a note if you're already signed in.
 		</p>
 	</main>
 	<footer>
@@ -31,31 +35,3 @@
 	</footer>
 	</body>
 	</html>
-=======
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="PyPad">
-		<title> PyPad</title>
-		<!-- styles -->
-		<link rel="stylesheet" href="{{ url_for('static', filename = 'main.css') }}">
-	</head>
-	<body>
-
-	<nav>
-		<a href="{{ url_for('index') }}"> Home</a> ||
-		<a href="{{ url_for('get_notes') }}"> My Notes</a> ||
-		<a href="{{ url_for('new_note') }}"> Add Note</a> ||
-	</nav>
-
-	<h1>Welcome {{user.name}} to PyPad!</h1>
-	
-	<h2>Use this site to maintain and orgainize your notes.</h2>
-
-</body>
-</html>
-
-
->>>>>>> 32fc769d176dc61790b41c675a7bc33af671cf0b
