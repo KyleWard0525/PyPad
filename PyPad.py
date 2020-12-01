@@ -1,5 +1,3 @@
-# FLASK Tutorial 1 -- We show the bare bones code to get an app up and running
-
 # imports
 import os                 # os is used to get environment variables IP & PORT
 import sys
@@ -34,21 +32,9 @@ db.init_app(app)
 #Current logged-in user
 curr_user = None
 
-#Mock notes
-mock_notes = {
-
-    0 : {"title": "First note", "text": "First note text", "date":date.today().strftime("%m-%d-%Y")},
-    1 : {"title": "Second note", "text": "Second note text", "date":date.today().strftime("%m-%d-%Y")},
-    2 : {"title": "Third note", "text": "Third note text", "date":date.today().strftime("%m-%d-%Y")}
-    }
-
 #Setup models
 with app.app_context():
     db.create_all() #run under app context
-
-
-
-
 
 # @app.route is a decorator. It gives the function "index" special powers.
 # In this case it makes it so anyone going to "your-url/" makes this function
@@ -65,7 +51,7 @@ def index():
 @app.route('/notes')
 def get_notes():
 
-    my_notes = mock_notes
+    my_notes = db.session.query(Note).all()
 
     return render_template('notes.html', notes=my_notes, user = curr_user)
 
@@ -119,6 +105,16 @@ def update_note(note_id):
         my_note = db.session.query(Note).filter_by(id=note_id).one()
 
         return render_template('new.html', note=my_note, user=curr_user)
+
+#App route to delete note
+@app.route('/notes/delete/<note_id>', methods=['POST'])
+def delete_note(note_id):
+    # retrieve note from database
+    my_note = db.session.query(Note).filter_by(id=note_id).one()
+    db.session.delete(my_note)
+    db.session.commit()
+
+    return redirect(url_for('get_notes'))
 
 #Create account page
 @app.route('/createAccount', methods=["GET", "POST"])
