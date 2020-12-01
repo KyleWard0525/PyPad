@@ -21,14 +21,6 @@ h2.signup_prompt {
 	margin-bottom: 10px;
 }
 
-a
-{
-	font-family: "Courier New";
-    padding: 30px 30px;
-    background: purple;
-	font-size: 16px;
-}
-
 footer
 {
 	font-family: "Courier New";
@@ -64,6 +56,13 @@ h1.status_msg {
 	width: 250px;
 	height: 70px;
 	margin-bottom: 30px;
+	transition-duration: 0.4s;
+}
+
+.ca_button:hover {
+	background-color: silver;
+	color: purple;
+	font-weight: bold;
 }
 
 a.login_notice {
@@ -74,3 +73,11 @@ a.login_notice {
 	display: block;
 }
 
+a.nav_button {
+	color: white;
+	background: purple;
+	margin-left: 5px;
+	margin-right: 5px;
+	text-align: center;
+	padding: 10px 10px 10px 10px;
+}
