@@ -9,20 +9,26 @@
 		<link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
 	</head>
 	<body>
-	<a href={{url_for('index')}}>Home</a> ||
-	<a href={{url_for('createAccount')}}>Create Account</a> ||
-	<a>Login</a>
+	<a href="{{url_for('index')}}">Home</a> ||
+	<a href="{{url_for('createAccount')}}">Create Account</a> ||
+	<a href="{{url_for('login')}}">Login</a> ||
+	<a href="{{url_for('get_notes')}}"><u>My notes</u></a> ||
+	<a href="{{url_for('new_note')}}"><u>Create new note</u></a>
 	<main>
-		<h1><b>Please fill out your name and email address so that we can add you and can start writing notes</b></h1>
-        <form action="createAccount" method="get">
-            <p><label>Enter full name</label><input type="text" name="username"></p>
-            <p><label>Enter email</label><input type="email" name="email"></p>
-            <p><label>Set password</label><input type="text" name="password"></p>
-            <p><input type="submit" value="CreateAccount"></p>
+		<p><b>
+			Please fill out your name and email address so that we can add you and can start writing notes. You must fill
+			out every field or you won't be able to create your account. You will be displayed what you are required
+		</b></p>
+        <form action="createAccount" method="post">
+            <p><label>Enter Username: </label><input type="text" name="username"></p>
+            <p><label>Enter email: </label><input type="email" name="email"></p>
+            <p><label>Create password: </label><input type="password" name="password"></p>
+            <p><input type="submit" value="Create Account"></p>
         </form>
+		<h1 class="error">{{error}}</h1>
 	</main>
 	<footer>
-		Copyright 2020 by Python Cobra
+		Copyright 2020 by Python Cobra Software LLC. All rights reserved.
 	</footer>
 	</body>
 	</html>

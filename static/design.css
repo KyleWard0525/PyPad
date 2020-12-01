@@ -1,18 +1,84 @@
 body
 {
+	font-family: "Courier New";
     text-align: center;
     color: white;
     background: black;
 }
 h1
 {
+	font-family: "Courier New";
     color: white;
     background: purple;
-    margin: 120px;
+    margin: 60px;
 }
 
-a
+h1.welcome {
+	margin-top: 80px;
+}
+
+h2.signup_prompt {
+	margin-bottom: 10px;
+}
+
+footer
 {
-    padding: 30px 30px;
-    background: violet;
+	font-family: "Courier New";
+    background: purple;
+	margin-top: 550px;
+}
+
+h1.error {
+	color: red;
+	background: purple;
+	font-family: "Courier New";
+}
+
+h1.status_msg {
+	text-align: center;
+	text-decoration: underline;
+	text-transform: uppercase;
+	background: purple;
+	margin: auto;
+	padding: 5px 5px 5px 5px;
+	margin-top: 40px;
+	font-family: "Courier New";
+}
+
+.ca_button {
+	color: white;
+	background-color: purple;
+	border-style: double;
+	display: inline-block;
+	font-size: 24px;
+	font-family: "Courier New";
+	text-align: center;
+	cursor: pointer;
+	width: 250px;
+	height: 70px;
+	margin-bottom: 30px;
+	transition-duration: 0.4s;
+}
+
+.ca_button:hover {
+	background-color: silver;
+	color: purple;
+	font-weight: bold;
+}
+
+a.login_notice {
+	padding: 1px 1px 1px 1px;
+	margin: 2px;
+	background: black;
+	color: blue;
+	display: block;
+}
+
+a.nav_button {
+	color: white;
+	background: purple;
+	margin-left: 5px;
+	margin-right: 5px;
+	text-align: center;
+	padding: 10px 10px 10px 10px;
 }

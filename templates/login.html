@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="PyPad Literary Development">
+		<link rel="shortcut icon" type="image/png" href="../images/icon.png">
+		<title>PyPad Log in</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
+	</head>
+	<body>
+	<a href="{{url_for('index')}}">Home</a> ||
+	<a href="{{url_for('createAccount')}}">Create Account</a> ||
+	<a href="{{url_for('login')}}">Login</a> ||
+	<a href="{{url_for('get_notes')}}"><u>My notes</u></a> ||
+	<a href="{{url_for('new_note')}}"><u>Create new note</u></a>
+	<main>
+		<h1><b>Fill in login information</b></h1>
+		<p>If you don't have an account on PyPad, then click on 'Create Account' to create your account.</p>
+        <form action="login" method="post">
+            <p><label>Enter username:</label><input type="text" name="username"></p>
+            <p><label>Enter password:</label><input type="password" name="password"></p>
+            <p><input type="submit" value="Login"></p>
+        </form>
+		<h1 class="error">{{error}}</h1>
+	</main>
+	<footer>
+		Copyright 2020 by Python Cobra Software LLC. All rights reserved.
+	</footer>
+	</body>
+	</html>
