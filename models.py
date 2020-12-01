@@ -35,6 +35,12 @@ class User(db.Model):
         print("password: " + str(self.password))
         print("\n")
 
+    def getPW(self):
+        return self.password
+
+    def getEmail(self):
+        return self.email
+
 class Comment(db.Model):
     id = db.Column("id", db.Integer, primary_key=True)
     text = db.Column("text", db.String(100))
