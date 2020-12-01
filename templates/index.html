@@ -18,7 +18,7 @@
 		</nav>
 	<main>
 
-		<h1 class="welcome">Welcome to PyPad</h1>
+		<h1 class="welcome">Welcome {{user.user_name}} to PyPad</h1>
 		<h2 class="signup_prompt">Don't have an account? Sign up here!</h2>
 		
 		<button class="ca_button"><a href="{{url_for('createAccount')}}" style="color:white; text-decoration: none;">Create Account</a></button>
