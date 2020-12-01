@@ -31,6 +31,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #Connect the database object to the flask app
 db.init_app(app)
 
+#Current logged-in user
+curr_user = None
+
 #Mock notes
 mock_notes = {
 
@@ -49,41 +52,33 @@ with app.app_context():
 @app.route('/')
 @app.route('/index')
 def index():    
-    #a_user = db.session.query(User).filter_by(email='ysong21@uncc.edu').one()
-    a_user = User(name="username",email="user@gmail.com",password="Password12!3:")
-    a_user.toString()
-    db.session.add(a_user)
-    db.session.commit()
 
-    print("User email: ", str(a_user.email))
+    #Print out all users in the database
+    users = User.query.all()
 
-    db_user = db.session.query(User).filter_by(user_name=a_user.user_name).first()
+    for user in users:
+        user.toString()
 
-    print("\nUser pulled from database:\n")
-    db_user.toString()
-    print("DB User email: ", str(crypt.decrypt(db_user.email)))
+        if user.user_name == "Not Kyle Ward":
+            print("\nUser: Not Kyle Ward:\n")
+            print("Email: " + str(crypt.decrypt(user.email)))
+            print("Password: " + str(crypt.decrypt(user.password)))
 
-    return render_template('index.html', user = a_user)
+    return render_template('index.html', user = curr_user)
 
 @app.route('/notes')
 def get_notes():
 
-    #a_user = db.session.query(User).filter_by(email='ysong21@uncc.edu').one()
-    a_user = User(name="username",email="user@gmail.com",password="Password12!3:")
-
     my_notes = mock_notes
 
-    return render_template('notes.html', notes=my_notes, user = a_user)
+    return render_template('notes.html', notes=my_notes, user = curr_user)
 
 @app.route('/notes/<note_id>')
 def get_note(note_id):
 
-    #a_user = db.session.query(User).filter_by(email='ysong21@uncc.edu').one()
-    a_user = User(name="username",email="user@gmail.com",password="Password12!3:")
-
     my_notes = db.session.query(Note).filter_by(id=note_id).one()
 
-    return render_template('note.html', note=my_notes, user = a_user)
+    return render_template('note.html', note=my_notes, user = curr_user)
 
 @app.route('/notes/new', methods=['GET', 'POST'])
 def new_note():
@@ -103,8 +98,31 @@ def new_note():
             return redirect(url_for('get_notes'))
 
         else:
-            a_user = db.session.query(User).filter_by(email='ysong21@uncc.edu').one()
-            return render_template('new.html', user=a_user)
+            return render_template('new.html', user=curr_user)
+#App route to edit note
+@app.route('/notes/edit/<note_id>', methods=["GET", "POST"])
+def update_note(note_id):
+
+    #Check for POST request
+    if request.method == "POST":
+        title = request.form['title']
+        text = request.form['noteText']
+        note = db.session.query(Note).filter_by(id=note_id).one()
+
+        #Update note data
+        note.title = title
+        note.text = text
+
+        #Update database
+        db.session.add(note)
+        db.session.commit()
+
+        return redirect(url_for('get_notes'))
+    else:
+        #Get note with note_id from db
+        my_note = db.session.query(Note).filter_by(id=note_id).one()
+
+        return render_template('new.html', note=my_note, user=curr_user)
 
 #Create account page
 @app.route('/createAccount', methods=["GET", "POST"])
@@ -121,8 +139,6 @@ def createAccount():
             return render_template("createAccount.html", error=utils.checkPasswordStrength(pw))
 
         #Encrypt data and create user object
-        email = crypt.encrypt(email)
-        pw = crypt.encrypt(pw)
         user = User(name=username,email=email,password=pw)
 
         user.toString()
@@ -138,7 +154,10 @@ def createAccount():
             #Add user to databse
             db.session.add(user)
             db.session.commit()
-            return render_template("status.html", status="Account Created!")
+
+            #Set current user
+            curr_user = user
+            return render_template("index.html", user=curr_user)
         
 
     return render_template("createAccount.html", error="")
@@ -147,7 +166,35 @@ def createAccount():
 @app.route('/login', methods=["GET", "POST"])
 def login():
 
-    return render_template("login.html")
+    #User is attempting to login
+    if request.method == "POST":
+        email = request.form['email']
+        pw = request.form['password']
+
+        #Encrypted login data and make User object
+        email = crypt.encrypt(email)
+        pw = crypt.encrypt(pw)
+        user = User(name="", email=email, password=pw)
+
+        #Check email exists
+        if db.session.query(User).filter_by(email=email).first():
+            #Check if password is correct
+            user = db.session.query(User).filter_by(email=email).one()
+
+            #Passwords match
+            if user.getPW() == pw:
+                #Return to homepage
+                curr_user = user
+                return render_template("index.html", user=user)
+            
+            #Wrong password
+            else:
+                return render_template("login.html", error="Incorrect password!")
+        else:
+            #User email not found
+            return render_template("login.html", error="Email not found!")
+
+    return render_template("login.html", error="")
 
 app.run(host=os.getenv('IP', '127.0.0.1'),port=int(os.getenv('PORT', 5000)),debug=True)
 
