@@ -1,0 +1,18 @@
+body
+{
+    text-align: center;
+    color: white;
+    background: black;
+}
+h1
+{
+    color: white;
+    background: purple;
+    margin: 120px;
+}
+
+a
+{
+    padding: 30px 30px;
+    background: violet;
+}
