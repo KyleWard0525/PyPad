@@ -3,30 +3,25 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="PyPad">
-        <link rel="shortcut icon" type="image/png" href="../images/icon.png">
-        <title>PyPad - New Note</title>
+        <meta name="description" content="UNCC Notes App">
+        <title>UNCC Notes App - New Note</title>
         <!-- styles -->
         <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     </head>
     <body>
-       <nav>
-           <!--  add navigation links -->
-           <a href="{{url_for('index')}}">Home</a> ||
-           <a href="{{url_for('createAccount')}}">Create Account</a> ||
-	        <a href="{{url_for('login')}}">Login</a> ||
-	        <a href="{{url_for('get_notes')}}"><u>My notes</u></a> ||
-	        <a href="{{url_for('new_note')}}"><u>Create new note</u></a>
-       </nav>
+        <nav>
+		<a href="{{ url_for('index') }}"> Home</a> ||
+		<a href="{{ url_for('get_notes') }}"> My Notes</a> ||
+		<a href="{{ url_for('logout') }}">Logout</a>
+		<nav>
 
-        <h1>Welcome {{user.user_name}} to the PyPad!</h1>
+        <h1>Welcome {% if user %} {{user}} {% endif %}to the 49er Notes App!</h1>
 
        {% if note %}
             <form action="{{ url_for('update_note', note_id=note.id) }}" method="post">
        {% else %}
-
-        <form action="new" method="post">
-            {% endif %}
+            <form action="new" method="post">
+                {% endif %}
            <p><label>Title </label></p><p>
             <input type="text" name="title" value="{% if note %}{{note.title}} {% endif %}"/></p>
             <p><label>Note </label></p>
@@ -37,18 +32,15 @@
                     {% else %}
                         Add your new note here ...
                     {% endif %}
-
                 </textarea>
-
             </p>
             <p>
                 {% if note %}
-                    <input type="submit" value="Update Note"/>
+                    <input type="submit" value="Update Note"/></p>
                 {% else %}
-                    <input type="submit" value="Add Note"/>
+                    <input type="submit" value="Add Note"/></p>
                 {% endif %}
-            </p>
-        </form>
+
         </form>
     </body>
 </html>
