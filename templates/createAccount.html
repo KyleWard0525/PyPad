@@ -11,29 +11,27 @@
     <body>
 
     {% if user %}
-		<nav>
-			<a href="{{ url_for('logout') }}">Logout</a>||
+
+            <div class="navdiv">
+
+            <nav>
+                <a href="{{ url_for('logout') }}">Logout</a>||
                 <a href="{{ url_for('new_note') }}">Add Note</a>
-		</nav>
+                <a href="{{ url_for('index') }}"> Home</a> ||
+                <a href="{{ url_for('get_notes') }}"> My Notes</a>
+            </nav>
+
+        </div>
 	{% else %}
 		<nav>
 			<a href="{{ url_for('login') }}">Sign In</a> ||
-			<a href="{{ url_for('register') }}">Create Account</a>
+			<a href="{{ url_for('createAccount') }}">Create Account</a>
 		</nav>
 	{% endif %}
 
             <br>
             <br>
             <br>
-
-        <div class="navdiv">
-
-            <nav>
-                <a href="{{ url_for('index') }}"> Home</a> ||
-                <a href="{{ url_for('get_notes') }}"> My Notes</a>
-            </nav>
-
-        </div>
         <h1>Welcome {% if user %}{{user}}{% endif %}to PyPad!</h1>
 
         <h2>Use this site to maintain and organize your notes.</h2>
