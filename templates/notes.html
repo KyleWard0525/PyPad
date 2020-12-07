@@ -10,22 +10,18 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
     </head>
     <body>
-
-        <nav>
-		    <a href="{{ url_for('index') }}"> Home</a> ||
-		    <a href="{{ url_for('get_notes') }}"> My Notes</a> ||
-		    <a href="{{ url_for('logout') }}">Logout</a>||
-            <a href="{{ url_for('new_note') }}">Add Note</a>
-		</nav>
-
+    <nav>
+        <a href="{{ url_for('index') }}">Home</a> ||
+        <a href="{{ url_for('get_notes') }}"> My Notes</a> ||
+        <a href="{{ url_for('new_note') }}">Add Note</a> ||
+        <a href="{{ url_for('logout') }}">Logout</a>||
+    </nav>
         <h1>Welcome {{user}} to PyPad!</h1>
         <h1>Listing notes</h1>
-        {% if user %}
         <p>
             Below are your notes that you have created listed by the date they were made. View, edit or delete any of
             your notes.
         </p>
-        {% endif %}
 
         <table>
             <tr>
