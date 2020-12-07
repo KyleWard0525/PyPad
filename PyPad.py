@@ -1,6 +1,6 @@
 # imports
-import os                 # os is used to get environment variables IP & PORT
-from flask import Flask   # Flask is the web app that we will customize
+import os  # os is used to get environment variables IP & PORT
+from flask import Flask  # Flask is the web app that we will customize
 from datetime import datetime
 from flask import render_template
 from flask import request
@@ -16,17 +16,17 @@ from forms import LoginForm
 from models import Comment as Comment
 from forms import RegisterForm, LoginForm, CommentForm
 
-
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flask_note_app.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'SE3155'
 #  Bind SQLAlchemy db object to this Flask app
 db.init_app(app)
 # Setup models
 with app.app_context():
-    db.create_all()   # run under the app context
+    db.create_all()  # run under the app context
+
 
 # @app.route is a decorator. It gives the function "index" special powers.
 # In this case it makes it so anyone going to "your-url/" makes this function
@@ -39,6 +39,7 @@ def index():
         return render_template("index.html", user=session['user'])
     return render_template("index.html")
 
+
 @app.route('/notes')
 def get_notes():
     # # retrieve user from database
@@ -49,6 +50,7 @@ def get_notes():
         return render_template('notes.html', notes=my_notes, user=session['user'])
     else:
         return redirect(url_for('login'))
+
 
 @app.route('/notes/<note_id>')
 def get_note(note_id):
@@ -63,6 +65,7 @@ def get_note(note_id):
         return render_template("note.html", note=my_note, user=session['user'], form=form)
     else:
         return render_template("login")
+
 
 @app.route('/notes/new', methods=['GET', 'POST'])
 def new_note():
@@ -127,23 +130,25 @@ def update_note(note_id):
         # user is not in session redirect to login
         return render_template("login")
 
+
 @app.route('/notes/delete/<note_id>', methods=['POST'])
 def delete_note(note_id):
     # check if a user is saved in session
     if session.get('user'):
-            # retrieve note from database
-            my_note = db.session.query(Note).filter_by(id=note_id).one()
+        # retrieve note from database
+        my_note = db.session.query(Note).filter_by(id=note_id).one()
 
-            db.session.delete(my_note)
-            db.session.commit()
+        db.session.delete(my_note)
+        db.session.commit()
 
-            return redirect(url_for('get_notes'))
+        return redirect(url_for('get_notes'))
     else:
         # user is not in session redirect to login
         return render_template("login")
 
+
 @app.route('/createAccount', methods=['POST', 'GET'])
-def register():
+def createAccount():
     form = RegisterForm()
     # validate_on submit only validates using POST
     if form.validate_on_submit():
@@ -163,6 +168,7 @@ def register():
 
         return redirect(url_for('get_notes'))
     return render_template('createAccount.html', form=form)
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -215,7 +221,7 @@ def new_comment(note_id):
         return redirect(url_for('login'))
 
 
-app.run(host=os.getenv('IP', '127.0.0.1'),port=int(os.getenv('PORT', 5000)),debug=True)
+app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)
 
 # To see the web page in your web browser, go to the url,
 #   http://127.0.0.1:5000
@@ -223,5 +229,3 @@ app.run(host=os.getenv('IP', '127.0.0.1'),port=int(os.getenv('PORT', 5000)),debu
 # Note that we are running with "debug=True", so if you make changes and save it
 # the server will automatically update. This is great for development but is a
 # security risk for production.
-
-
