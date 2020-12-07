@@ -10,23 +10,21 @@
 	</head>
 	<body>
 		<nav>
+			<a href="{{ url_for('index') }}"> Home</a> ||
+			<a href="{{ url_for('get_notes') }}"> My Notes</a> ||
+			<a href="{{ url_for('new_note') }}">Add Note</a>
+		</nav>
 		{% if user %}
 		<nav>
 			<a href="{{ url_for('logout') }}">Logout</a>||
-			<a href="{{ url_for('new_note') }}">Add Note</a>
-		<nav>
-	{% else %}
+		</nav>
+		{% else %}
 		<nav>
 			<a href="{{ url_for('login') }}">Sign In</a> ||
 			<a href="{{ url_for('register') }}">Register</a>
-		<nav>
-	{% endif %}
-			<br>
-			<br>
-			<br>
-		<a href="{{ url_for('index') }}"> Home</a> ||
-		<a href="{{ url_for('get_notes') }}"> My Notes</a>
-	</nav>
+		</nav>
+		{% endif %}
+
 
 	<h1>Welcome {{user}} to the PyPad!</h1>
 	
