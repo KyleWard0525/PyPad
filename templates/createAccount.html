@@ -10,10 +10,10 @@
 	</head>
 	<body>
 	<a href="{{url_for('index')}}">Home</a> ||
-	<a href="{{url_for('createAccount')}}">Create Account</a> ||
-	<a href="{{url_for('login')}}">Login</a> ||
+	{% if user %}
 	<a href="{{url_for('get_notes')}}"><u>My notes</u></a> ||
-	<a href="{{url_for('new_note')}}"><u>Create new note</u></a>
+	<a href="{{url_for('new_note')}}"><u>Create new note</u></a> ||
+	{% endif %}
 	<main>
 		<p><b>
 			Please fill out your name and email address so that we can add you and can start writing notes. You must fill
