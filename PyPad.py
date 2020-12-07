@@ -162,7 +162,7 @@ def register():
         session['user_id'] = the_user.id
 
         return redirect(url_for('get_notes'))
-    return render_template('register.html', form=form)
+    return render_template('createAccount.html', form=form)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
