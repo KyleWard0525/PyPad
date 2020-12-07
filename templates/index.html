@@ -21,14 +21,22 @@
 		{% else %}
 		<nav>
 			<a href="{{ url_for('login') }}">Sign In</a> ||
-			<a href="{{ url_for('register') }}">Register</a>
+			<a href="{{ url_for('register') }}">Create Account</a>
 		</nav>
 		{% endif %}
 
 
 	<h1>Welcome {{user}} to the PyPad!</h1>
-	
-	<h2>Use this site to maintain and organize your notes.</h2>
+	<h2 class="signup_prompt">Don't have an account? Sign up here!</h2>
+
+		<button class="ca_button"><a href="{{url_for('createAccount')}}" style="color:white; text-decoration: none;">Create Account</a></button>
+		<a href="{{url_for('login')}}" class="login_notice">Already have an account? Login here</a>
+
+		<p>
+			Feel free to use PyPad to create notes for any short notes for school, projects, etc. If you are new to
+			PyPad, then click on 'Create Account' to set up an account. If not a new user, then click on 'Login'
+			login into your account. You can view your notes or create a note if you're already signed in.
+		</p>
 
 	</body>
 </html>
