@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
 </head>
     <body>
+    <main>
     <nav>
 			<a href="{{ url_for('index') }}"> Home</a> ||
 			<a href="{{ url_for('get_notes') }}"> My Notes</a> ||
@@ -26,7 +27,10 @@
 		{% endif %}
         <h1>Welcome {% if user %}{{user}}{% endif %}to PyPad!</h1>
 
-        <h2>Use this site to maintain and organize your notes.</h2>
+        <p><b>
+			Please fill out your name and email address so that we can add you and can start writing notes. You must fill
+			out every field or you won't be able to create your account. You will be displayed what you are required
+		</b></p>
         <div class="formwrapper">
             <h2 class="title">Register</h2>
             <form method="POST" action="/register">
@@ -79,5 +83,11 @@
             </form>
 
         </div>
+        </main>
+    <footer>
+		Copyright 2020 by Python Cobra Software LLC. All rights reserved.
+	</footer>
     </body>
+
+
 </html>

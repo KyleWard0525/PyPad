@@ -9,26 +9,42 @@
 		<link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
 	</head>
 	<body>
+
 		<nav>
-			<a href="{{ url_for('index') }}"> Home</a> ||
-			<a href="{{ url_for('get_notes') }}"> My Notes</a> ||
-			<a href="{{ url_for('new_note') }}">Add Note</a>
-		</nav>
-		{% if user %}
-		<nav>
-			<a href="{{ url_for('logout') }}">Logout</a>||
-		</nav>
-		{% else %}
-		<nav>
-			<a href="{{ url_for('login') }}">Sign In</a> ||
-			<a href="{{ url_for('createAccount') }}">Create Account</a>
-		</nav>
-		{% endif %}
+				<a href="{{ url_for('index') }}"> Home</a> ||
+				<a href="{{ url_for('get_notes') }}"> My Notes</a> ||
+				<a href="{{ url_for('new_note') }}">Add Note</a>
+			</nav>
+			{% if user %}
+			<nav>
+				<a href="{{ url_for('logout') }}">Logout</a>||
+			</nav>
+			{% else %}
+			<nav>
+				<a href="{{ url_for('login') }}">Sign In</a> ||
+				<a href="{{ url_for('createAccount') }}">Create Account</a>
+			</nav>
+			{% endif %}
+		<main>
+		<h1 class="welcome">Welcome {{user}} to PyPad</h1>
+			{% if not user %}
+				<h2 class="signup_prompt">Don't have an account? Sign up here!</h2>
 
-
-	<h1>Welcome {{user}} to the PyPad!</h1>
-
-
+				<button class="ca_button"><a href="{{url_for('createAccount')}}" style="color:white; text-decoration: none;">Create Account</a></button>
+				<a href="{{url_for('login')}}" class="login_notice">Already have an account? Login here</a>
+			{% endif %}
+			<p>
+				Feel free to use PyPad to create notes for any short notes for school, projects, etc.
+				{% if not user %}
+				If you are new to
+				PyPad, then click on 'Create Account' to set up an account. If not a new user, then click on 'Login'
+				login into your account. You can view your notes or create a note if you're already signed in.
+				{% endif %}
+			</p>
+		</main>
+		<footer>
+			Copyright 2020 by Python Cobra Software LLC. All rights reserved.
+		</footer>
 	</body>
 </html>
 
