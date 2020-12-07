@@ -142,7 +142,7 @@ def delete_note(note_id):
         # user is not in session redirect to login
         return render_template("login")
 
-@app.route('/register', methods=['POST', 'GET'])
+@app.route('/createAccount', methods=['POST', 'GET'])
 def register():
     form = RegisterForm()
     # validate_on submit only validates using POST
