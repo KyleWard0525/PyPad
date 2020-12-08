@@ -10,6 +10,14 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
         <script src="https://cdn.ckeditor.com/4.15.1/standard-all/ckeditor.js">//for rich text</script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+            $( function() {
+                $( ".container input[type=submit]" ).button();
+                $( "input" ).click( function( event ) {
+                    event.preventDefault();
+                } );
+            } );
+        </script>
     </head>
     <body>
        <nav>
