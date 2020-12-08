@@ -33,20 +33,14 @@ app.config['SECRET_KEY'] = 'SE3155'
 #Connect the database object to the flask app
 db.init_app(app)
 
-<<<<<<< HEAD
-=======
+
 #Current logged-in user
 curr_user = None
 
->>>>>>> dcbf6124ccf0583b194a5cfc7e15ae1d4c51946b
 #Setup models
 with app.app_context():
     db.create_all() #run under app context
 
-<<<<<<< HEAD
-
-=======
->>>>>>> dcbf6124ccf0583b194a5cfc7e15ae1d4c51946b
 # @app.route is a decorator. It gives the function "index" special powers.
 # In this case it makes it so anyone going to "your-url/" makes this function
 # get called. What it returns is what is shown as the web page
@@ -70,13 +64,9 @@ def get_notes():
         #Redirect to login page
         return redirect(url_for('login'))
 
-<<<<<<< HEAD
-    
-=======
     my_notes = db.session.query(Note).all()
 
     return render_template('notes.html', notes=my_notes, user = curr_user)
->>>>>>> dcbf6124ccf0583b194a5cfc7e15ae1d4c51946b
 
 @app.route('/notes/<note_id>')
 def get_note(note_id):
@@ -160,15 +150,6 @@ def update_note(note_id):
     else:
         return redirect(url_for('login'))
 
-#App route to delete note
-@app.route('/notes/delete/<note_id>', methods=['POST'])
-def delete_note(note_id):
-    # retrieve note from database
-    my_note = db.session.query(Note).filter_by(id=note_id).one()
-    db.session.delete(my_note)
-    db.session.commit()
-
-    return redirect(url_for('get_notes'))
 
 #Create account page
 @app.route('/createAccount', methods=["GET", "POST"])
