@@ -6,7 +6,7 @@ import sys
 from flask import Flask   # Flask is the web app that we will customize
 from flask import render_template
 from flask import request
-from flask import redirect, url_for
+from flask import redirect, url_for, session
 from database import db
 from datetime import date
 from models import Note as Note
@@ -29,19 +29,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 #Disable tracking
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+#Configure session key
+app.config['SECRET_KEY'] = 'SE3155'
+
 #Connect the database object to the flask app
 db.init_app(app)
-
-#Current logged-in user
-curr_user = None
-
-#Mock notes
-mock_notes = {
-
-    0 : {"title": "First note", "text": "First note text", "date":date.today().strftime("%m-%d-%Y")},
-    1 : {"title": "Second note", "text": "Second note text", "date":date.today().strftime("%m-%d-%Y")},
-    2 : {"title": "Third note", "text": "Third note text", "date":date.today().strftime("%m-%d-%Y")}
-    }
 
 #Setup models
 with app.app_context():
@@ -54,83 +46,106 @@ with app.app_context():
 @app.route('/')
 @app.route('/index')
 def index():
-
-    return render_template('index.html', user = curr_user)
+    #Check if user exists
+    if session.get('user'):       
+        return render_template('index.html', user = session['user'])
+    else:
+        return render_template('index.html')
 
 @app.route('/notes')
 def get_notes():
+    #Check if user exists
+    if session.get('user'):
+        #Get user notes
+        user_notes = db.session.query(Note).filter_by(user_id=session['user_id'])
+        return render_template('notes.html', notes=user_notes, user = session['user'])
+    else:
+        #Redirect to login page
+        return redirect(url_for('login'))
 
-    user_notes = db.session.query(Note).all()
-
-    return render_template('notes.html', notes=user_notes, user = curr_user)
+    
 
 @app.route('/notes/<note_id>')
 def get_note(note_id):
+    #Check if user exists
+    if session.get('user'):
+        #Get the current note
+        user_note = db.session.query(Note).filter_by(id=note_id).one()
+        return render_template('note.html', note=user_note, user = session['user'])
+    else:
+        return redirect(url_for('get_notes'))
 
-    my_notes = db.session.query(Note).filter_by(id=note_id).one()
+    
 
-    return render_template('note.html', note=my_notes, user = curr_user)
-
-@app.route('/notes/new', methods=['GET', 'POST'])
+#App route to view new note page
+@app.route('/notes/new_note', methods=["GET", "POST"])
 def new_note():
-        if request.method == 'POST':
-
-            title = request.form['title']
-
-            text = request.form['noteText']
-
-            
-            
+    
+    if session.get('user'):
+    #Check request method
+        if request.method == "POST":
+        #Process form data and add new note to list
+            title = request.form["title"]
+            text = request.form["noteText"]
             today = date.today().strftime("%m-%d-%Y")
-            new_record = Note(title, text, today)
-
-            print(new_record.title)
-            print(new_record.date)
-            
+        
+        #Create new note and add to db
+            new_record = Note(title, text, today, user_id = session['user_id'])
             db.session.add(new_record)
             db.session.commit()
-
-            return redirect(url_for('get_notes'))
-
+        
+        #Redirect user to view notes list
+            return redirect(url_for("get_notes"))
+        
         else:
-            return render_template('new.html', user=curr_user)
+            return render_template("new.html", user=session['user'])
+    else:
+        return redirect(url_for('login'))
 
 #App route to delete a note
 @app.route('/notes/delete/<note_id>', methods=["POST"])
 def delete_note(note_id):
-    #Get note from database
-    my_note = db.session.query(Note).filter_by(id=note_id).one()
+    if session.get('user'):
+        
+        #Get note from database
+        user_note = db.session.query(Note).filter_by(id=note_id).one()
 
-    #Delete note
-    db.session.delete(my_note)
-    db.session.commit()
+        #Delete note
+        db.session.delete(user_note)
+        db.session.commit()
 
-    return redirect(url_for('get_notes'))
+        return redirect(url_for('get_notes'))
+    else:
+        return redirect(url_for('login'))
 
 #App route to edit note
 @app.route('/notes/edit/<note_id>', methods=["GET", "POST"])
 def update_note(note_id):
 
-    #Check for POST request
-    if request.method == "POST":
-        title = request.form['title']
-        text = request.form['noteText']
-        note = db.session.query(Note).filter_by(id=note_id).one()
+    if session.get('user'):
+        
+        #Check for POST request
+        if request.method == "POST":
+            title = request.form['title']
+            text = request.form['noteText']
+            note = db.session.query(Note).filter_by(id=note_id).one()
 
-        #Update note data
-        note.title = title
-        note.text = text
+            #Update note data
+            note.title = title
+            note.text = text
 
-        #Update database
-        db.session.add(note)
-        db.session.commit()
+            #Update database
+            db.session.add(note)
+            db.session.commit()
 
-        return redirect(url_for('get_notes'))
+            return redirect(url_for('get_notes'))
+        else:
+            #Get note with note_id from db
+            my_note = db.session.query(Note).filter_by(id=note_id).one()
+
+            return render_template('new.html', note=my_note, user=session['user'])
     else:
-        #Get note with note_id from db
-        my_note = db.session.query(Note).filter_by(id=note_id).one()
-
-        return render_template('new.html', note=my_note, user=curr_user)
+        return redirect(url_for('login'))
 
 #Create account page
 @app.route('/createAccount', methods=["GET", "POST"])
@@ -145,6 +160,7 @@ def createAccount():
         #Check password requirements
         if not utils.checkPasswordStrength(pw) == "OK":
             return render_template("createAccount.html", error=utils.checkPasswordStrength(pw))
+
 
         #create user object
         user = User(name=username,email=email,password=pw)
@@ -161,9 +177,12 @@ def createAccount():
             db.session.add(user)
             db.session.commit()
 
-            #Set current user
-            curr_user = user
-            return render_template("index.html", user=curr_user)
+            #Save user's name
+            session['user'] = user.user_name
+
+            session['user_id'] = user.id
+            
+            return render_template("index.html", user=session['user'])
         
 
     return render_template("createAccount.html", error="")
@@ -185,14 +204,12 @@ def login():
             #Check if password is correct
             user = db.session.query(User).filter_by(user_name=username).one()
 
-            print("Entered password: " + str(pw))
-            print("Decrypted user password: " + crypt.decrypt(user.getPW()))
-
             #Passwords match
             if crypt.decrypt(user.getPW()) == pw:
                 #Return to homepage
-                curr_user = user
-                return render_template("index.html", user=user)
+                session['user'] = user.user_name
+                session['user_id'] = user.id
+                return render_template("index.html", user=session['user'])
             
             #Wrong password
             else:
@@ -202,6 +219,15 @@ def login():
             return render_template("login.html", error="User not found!")
 
     return render_template("login.html", error="")
+
+@app.route('/logout')
+def logout():
+    # check if a user is saved in session
+    if session.get('user'):
+        session.clear()
+
+    return redirect(url_for('index'))
+
 
 app.run(host=os.getenv('IP', '127.0.0.1'),port=int(os.getenv('PORT', 5000)),debug=True)
 
