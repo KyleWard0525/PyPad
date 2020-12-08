@@ -8,10 +8,11 @@ from flask import render_template
 from flask import request
 from flask import redirect, url_for
 from database import db
+from datetime import date
 from models import Note as Note
 from models import User as User
 from crypto import Crypto
-from datetime import date
+
 
 #Load /scripts into sys path
 sys.path.insert(1, "/scripts")
@@ -47,27 +48,21 @@ with app.app_context():
     db.create_all() #run under app context
 
 
-
-
-
 # @app.route is a decorator. It gives the function "index" special powers.
 # In this case it makes it so anyone going to "your-url/" makes this function
 # get called. What it returns is what is shown as the web page
 @app.route('/')
 @app.route('/index')
 def index():
-    #Print number of users in database
-    user_list = User.query.all()
-    print("\nNumber of users in the database: " + str(len(user_list)) + "\n")
 
     return render_template('index.html', user = curr_user)
 
 @app.route('/notes')
 def get_notes():
 
-    my_notes = mock_notes
+    user_notes = db.session.query(Note).all()
 
-    return render_template('notes.html', notes=my_notes, user = curr_user)
+    return render_template('notes.html', notes=user_notes, user = curr_user)
 
 @app.route('/notes/<note_id>')
 def get_note(note_id):
@@ -85,9 +80,13 @@ def new_note():
             text = request.form['noteText']
 
             
-            today = date.today()
-            today = today.strftime("%m-%d-%Y")
+            
+            today = date.today().strftime("%m-%d-%Y")
             new_record = Note(title, text, today)
+
+            print(new_record.title)
+            print(new_record.date)
+            
             db.session.add(new_record)
             db.session.commit()
 
@@ -95,6 +94,19 @@ def new_note():
 
         else:
             return render_template('new.html', user=curr_user)
+
+#App route to delete a note
+@app.route('/notes/delete/<note_id>', methods=["POST"])
+def delete_note(note_id):
+    #Get note from database
+    my_note = db.session.query(Note).filter_by(id=note_id).one()
+
+    #Delete note
+    db.session.delete(my_note)
+    db.session.commit()
+
+    return redirect(url_for('get_notes'))
+
 #App route to edit note
 @app.route('/notes/edit/<note_id>', methods=["GET", "POST"])
 def update_note(note_id):

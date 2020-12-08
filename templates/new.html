@@ -25,7 +25,7 @@
             <form action="{{ url_for('update_note', note_id=note.id) }}" method="post">
        {% else %}
 
-        <form action="new" method="post">
+        <form action="new_note" method="post">
             {% endif %}
            <p><label>Title </label></p><p>
             <input type="text" name="title" value="{% if note %}{{note.title}} {% endif %}"/></p>
