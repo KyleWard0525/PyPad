@@ -11,14 +11,18 @@
 	<body>
 	<nav>
 		<a href="{{url_for('index')}}" class="nav_button">Home</a> ||
-		<a href="{{url_for('createAccount')}}" class="nav_button">Create Account</a> ||
-		<a href="{{url_for('login')}}" class="nav_button">Login</a> ||
 		<a href="{{url_for('get_notes')}}" class="nav_button"><u>My notes</u></a> ||
-		<a href="{{url_for('new_note')}}" class="nav_button"><u>Create new note</u></a>
+		<a href="{{url_for('new_note')}}" class="nav_button"><u>Create new note</u></a> ||
+		{% if user %}
+        <a href="{{ url_for('logout') }}" class="nav_button"> Logout</a> 
+		{% else %}
+		<a href="{{url_for('createAccount')}}" class="nav_button">Create Account</a> ||
+		<a href="{{url_for('login')}}" class="nav_button">Login</a> 
+		{% endif %}
 		</nav>
 	<main>
 
-		<h1 class="welcome">Welcome {{user.user_name}} to PyPad</h1>
+		<h1 class="welcome">Welcome {{user}} to PyPad</h1>
 		<h2 class="signup_prompt">Don't have an account? Sign up here!</h2>
 		
 		<button class="ca_button"><a href="{{url_for('createAccount')}}" style="color:white; text-decoration: none;">Create Account</a></button>
