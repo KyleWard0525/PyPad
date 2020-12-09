@@ -1,9 +1,9 @@
 # FLASK Tutorial 1 -- We show the bare bones code to get an app up and running
 
 # imports
-import os                 # os is used to get environment variables IP & PORT
+import os  # os is used to get environment variables IP & PORT
 import sys
-from flask import Flask   # Flask is the web app that we will customize
+from flask import Flask  # Flask is the web app that we will customize
 from flask import render_template
 from flask import request
 from flask import redirect, url_for
@@ -12,42 +12,35 @@ from models import Note as Note
 from models import User as User
 from crypto import Crypto
 from datetime import date
-
-#Load /scripts into sys path
+from forms import RegisterForm
+from flask import session
+from forms import LoginForm
+from models import Comment as Comment
+from forms import RegisterForm, LoginForm, CommentForm
+# Load /scripts into sys path
 sys.path.insert(1, "/scripts")
 
 from scripts import utils
 
 app = Flask(__name__)
 
-crypt = Crypto() #For encrypting/decrypting data
+crypt = Crypto()  # For encrypting/decrypting data
 
-#Create database file
+# Create database file
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 
-#Disable tracking
+# Disable tracking
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-#Connect the database object to the flask app
+# Connect the database object to the flask app
 db.init_app(app)
 
-#Current logged-in user
+# Current logged-in user
 curr_user = None
 
-#Mock notes
-mock_notes = {
-
-    0 : {"title": "First note", "text": "First note text", "date":date.today().strftime("%m-%d-%Y")},
-    1 : {"title": "Second note", "text": "Second note text", "date":date.today().strftime("%m-%d-%Y")},
-    2 : {"title": "Third note", "text": "Third note text", "date":date.today().strftime("%m-%d-%Y")}
-    }
-
-#Setup models
+# Setup models
 with app.app_context():
-    db.create_all() #run under app context
-
-
-
+    db.create_all()  # run under app context
 
 
 # @app.route is a decorator. It gives the function "index" special powers.
@@ -56,142 +49,180 @@ with app.app_context():
 @app.route('/')
 @app.route('/index')
 def index():
-    #Print number of users in database
-    user_list = User.query.all()
-    print("\nNumber of users in the database: " + str(len(user_list)) + "\n")
+    # Print number of users in database
+    if session.get('user'):
+        return render_template("index.html", user=session['user'])
+    return render_template("index.html")
 
-    return render_template('index.html', user = curr_user)
+
 
 @app.route('/notes')
 def get_notes():
+    if session.get('user'):
+        my_notes = db.session.query(Note).filter_by(user_id=session['user_id']).all()
 
-    my_notes = mock_notes
+        return render_template('notes.html', notes=my_notes, user=session['user'])
+    else:
+        return redirect(url_for('login'))
 
-    return render_template('notes.html', notes=my_notes, user = curr_user)
 
 @app.route('/notes/<note_id>')
 def get_note(note_id):
-
     my_notes = db.session.query(Note).filter_by(id=note_id).one()
 
-    return render_template('note.html', note=my_notes, user = curr_user)
+    return render_template('note.html', note=my_notes, user=curr_user)
+
 
 @app.route('/notes/new', methods=['GET', 'POST'])
 def new_note():
+    # check if a user is saved in session
+    if session.get('user'):
+        # retrieve note from database
+        my_note = db.session.query(Note).filter_by(id=note_id, user_id=session['user_id']).one()
+
+        # create a comment form object
+        form = CommentForm()
+
+        return render_template("note.html", note=my_note, user=session['user'], form=form)
+    else:
+        return render_template("login")
+
+# App route to edit note
+@app.route('/notes/edit/<note_id>', methods=["GET", "POST"])
+def update_note(note_id):
+    # Check for POST request
+    if session.get('user'):
+        # check method used for request
         if request.method == 'POST':
-
+            # get title data
             title = request.form['title']
-
+            # get note data
             text = request.form['noteText']
-
-            
-            today = date.today()
-            today = today.strftime("%m-%d-%Y")
-            new_record = Note(title, text, today)
-            db.session.add(new_record)
+            note = db.session.query(Note).filter_by(id=note_id).one()
+            # update note data
+            note.title = title
+            note.text = text
+            # update note in DB
+            db.session.add(note)
             db.session.commit()
 
             return redirect(url_for('get_notes'))
 
         else:
-            return render_template('new.html', user=curr_user)
-#App route to edit note
-@app.route('/notes/edit/<note_id>', methods=["GET", "POST"])
-def update_note(note_id):
+            # GET request - show new note form to edit note
+            # retrieve user from database
+            a_user = db.session.query(User).filter_by(id=session['user_id']).one()
 
-    #Check for POST request
-    if request.method == "POST":
-        title = request.form['title']
-        text = request.form['noteText']
-        note = db.session.query(Note).filter_by(id=note_id).one()
+            # retrieve note from database
+            my_note = db.session.query(Note).filter_by(id=note_id).one()
 
-        #Update note data
-        note.title = title
-        note.text = text
+            return render_template('new.html', note=my_note, user=a_user)
+    else:
+        # user is not in session redirect to login
+        return render_template("login")
 
-        #Update database
-        db.session.add(note)
+@app.route('/notes/delete/<note_id>', methods=['POST'])
+def delete_note(note_id):
+    # check if a user is saved in session
+    if session.get('user'):
+        # retrieve note from database
+        my_note = db.session.query(Note).filter_by(id=note_id).one()
+
+        db.session.delete(my_note)
         db.session.commit()
 
         return redirect(url_for('get_notes'))
     else:
-        #Get note with note_id from db
-        my_note = db.session.query(Note).filter_by(id=note_id).one()
+         # user is not in session redirect to login
+        return render_template("login")
 
-        return render_template('new.html', note=my_note, user=curr_user)
-
-#Create account page
+# Create account page
 @app.route('/createAccount', methods=["GET", "POST"])
 def createAccount():
-    
-    #Check request type
-    if request.method == "POST":
+    # Check request type
+    form = RegisterForm()
+    # validate_on submit only validates using POST
+    if form.validate_on_submit():
+        # form validation included a criteria to check the username does not exist
+        # we can know we are safe to add the user to the database
+        password_hash = crypt.hashpw(
+            request.form['password'].encode('utf-8'), crypt.gensalt())
+        first_name = request.form['firstname']
+        last_name = request.form['lastname']
         username = request.form['username']
-        email = request.form['email']
-        pw = request.form['password']
+        new_record = User(first_name, last_name, username , request.form['email'], password_hash)
+        db.session.add(new_record)
+        db.session.commit()
+        # save the user's name to the session
+        session['user'] = username
+        the_user = db.session.query(User).filter_by(email=request.form['email']).one()
+        session['user_id'] = the_user.id
 
-        #Check password requirements
-        if not utils.checkPasswordStrength(pw) == "OK":
-            return render_template("createAccount.html", error=utils.checkPasswordStrength(pw))
+        return redirect(url_for('get_notes'))
+    return render_template('createAccount.html', form=form)
 
-        #create user object
-        user = User(name=username,email=email,password=pw)
 
-        
-        #Check if user email already exists
-        if db.session.query(User).filter_by(email=email).first():
-            return render_template("createAccount.html", error="Email already in use!")
-        #Check if username is already in use
-        elif db.session.query(User).filter_by(user_name = user.user_name).first():
-            return render_template("createAccount.html", error="Username already in use!")
-        else:
-            #Add user to databse
-            db.session.add(user)
-            db.session.commit()
-
-            #Set current user
-            curr_user = user
-            return render_template("index.html", user=curr_user)
-        
-
-    return render_template("createAccount.html", error="")
-
-#User login
+# User login
 @app.route('/login', methods=["GET", "POST"])
 def login():
-
-    #User is attempting to login
+    # User is attempting to login
     if request.method == "POST":
         username = request.form['username']
         pw = request.form['password']
 
-        #Make User object
+        # Make User object
         user = User(name=username, email="", password=pw)
 
-        #Check user exists
+        # Check user exists
         if db.session.query(User).filter_by(user_name=username).first():
-            #Check if password is correct
+            # Check if password is correct
             user = db.session.query(User).filter_by(user_name=username).one()
 
             print("Entered password: " + str(pw))
             print("Decrypted user password: " + crypt.decrypt(user.getPW()))
 
-            #Passwords match
+            # Passwords match
             if crypt.decrypt(user.getPW()) == pw:
-                #Return to homepage
+                # Return to homepage
                 curr_user = user
                 return render_template("index.html", user=user)
-            
-            #Wrong password
+
+            # Wrong password
             else:
                 return render_template("login.html", error="Incorrect password!")
         else:
-            #User email not found
+            # User email not found
             return render_template("login.html", error="User not found!")
 
     return render_template("login.html", error="")
 
-app.run(host=os.getenv('IP', '127.0.0.1'),port=int(os.getenv('PORT', 5000)),debug=True)
+@app.route('/logout')
+def logout():
+    # check if a user is saved in session
+    if session.get('user'):
+        session.clear()
+
+    return redirect(url_for('index'))
+
+
+@app.route('/notes/<note_id>/comment', methods=['POST'])
+def new_comment(note_id):
+    if session.get('user'):
+        comment_form = CommentForm()
+        # validate_on_submit only validates using POST
+        if comment_form.validate_on_submit():
+            # get comment data
+            comment_text = request.form['comment']
+            new_record = Comment(comment_text, int(note_id), session['user_id'])
+            db.session.add(new_record)
+            db.session.commit()
+
+        return redirect(url_for('get_note', note_id=note_id))
+
+    else:
+        return redirect(url_for('login'))
+
+app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)
 
 # To see the web page in your web browser, go to the url,
 #   http://127.0.0.1:5000
@@ -199,4 +230,3 @@ app.run(host=os.getenv('IP', '127.0.0.1'),port=int(os.getenv('PORT', 5000)),debu
 # Note that we are running with "debug=True", so if you make changes and save it
 # the server will automatically update. This is great for development but is a
 # security risk for production.
-
