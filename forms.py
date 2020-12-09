@@ -41,7 +41,7 @@ class LoginForm(FlaskForm):
         csrf = False
 
     username = StringField('Username', [
-        Username(message='Not a valid user name'),
+        Email(message='Not a valid user name'),
         DataRequired()])
 
     password = PasswordField('Password', [
