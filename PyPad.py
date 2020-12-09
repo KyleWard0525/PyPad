@@ -34,8 +34,8 @@ app.config['SECRET_KEY'] = 'SE3155'
 db.init_app(app)
 
 
-#Current logged-in user
-curr_user = None
+#Current user token
+token = None
 
 #Setup models
 with app.app_context():
@@ -230,8 +230,9 @@ def logout():
     return redirect(url_for('index'))
 
 #Send password recover link to email
-@app.route('/recover', methods=["GET", "POST"])
+@app.route('/recover', methods=["GET","POST"])
 def recover():
+    global token
     user_found = False
     
     #Check if user exists
@@ -253,7 +254,8 @@ def recover():
                     user_found = True
                     
                     #Try to send email
-                    link = request.host_url + 'reset/' + user.user_name
+                    link = request.host_url + 'reset_password/' + user.user_name
+                    token = user.user_name
 
                     print("\nLink: " + str(link) + "\n")
                     
@@ -270,9 +272,62 @@ def recover():
     return render_template('recover.html', error="")
 
 #Set new password
-@app.route('/reset/<token>', methods=["GET","POST"])
+@app.route('/reset_password/<token>', methods=["GET","POST"])
 def reset_password(token):
-    return render_template('reset_password.html')
+
+    print("\nToken: " + str(token) + "\n")
+
+    #Get user object from database
+    user = db.session.query(User).filter_by(user_name=token).first()
+
+    #Get old password
+    oldPW = user.password
+
+    #Set session user
+    session['user'] = token
+    session['user_id'] = user.id
+
+    #Check request type
+    if request.method == "POST":
+        newPw = request.form['newPW']
+        conf_newPW = request.form['conf_newPW']
+
+        #Check that new password is not old password
+        if request.form['newPW'] == crypt.decrypt(oldPW):
+            return render_template('reset_password.html', token=token, error="New password can not be the same as a previously used password!")
+
+        #Check password strength
+        if utils.checkPasswordStrength(request.form['newPW']) == "OK":
+            #Check that the passwords match
+            if request.form['newPW'] == conf_newPW:
+                #Reset password
+                user.password=crypt.encrypt(request.form['newPW'])
+                db.session.add(user)
+                db.session.commit()
+
+                #Ensure password was changed
+                if crypt.decrypt(user.password) != crypt.decrypt(oldPW):
+                    #Success
+                    return render_template('status.html', token=token, status="Your password has been successfully reset!")
+                #Password was not changed for some reason
+                else:
+                    return render_template('reset_password.html', token=token, error="An unknown error occured while trying to reset your password. Please try again.")
+            #Passwords dont match
+            else:
+                return render_template('reset_password.html', token=token, error="Password fields do not match!")
+        #Password doesn't meet the strength reqs
+        else:
+            return render_template('reset_password.html', token=token, error=utils.checkPasswordStrength(request.form['newPW']))
+    
+    return render_template('reset_password.html', token=token, error="")
+
+def getToken():
+    global token
+
+    if token != None:
+        return token
+    else:
+        return False
 
 app.run(host=os.getenv('IP', '127.0.0.1'),port=int(os.getenv('PORT', 5000)),debug=True)
 
