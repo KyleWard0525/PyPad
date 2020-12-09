@@ -64,10 +64,6 @@ def get_notes():
         #Redirect to login page
         return redirect(url_for('login'))
 
-    my_notes = db.session.query(Note).all()
-
-    return render_template('notes.html', notes=my_notes, user = curr_user)
-
 @app.route('/notes/<note_id>')
 def get_note(note_id):
     #Check if user exists
@@ -224,6 +220,7 @@ def login():
 
     return render_template("login.html", error="")
 
+#Logout the user
 @app.route('/logout')
 def logout():
     # check if a user is saved in session
@@ -232,6 +229,50 @@ def logout():
 
     return redirect(url_for('index'))
 
+#Send password recover link to email
+@app.route('/recover', methods=["GET", "POST"])
+def recover():
+    user_found = False
+    
+    #Check if user exists
+    if session.get('user'):
+        return redirect(url_for('index'))
+    else:
+        #Check method type
+        if request.method == "POST":
+            #Get email from text field
+            email = request.form['email']
+
+            if email == "":
+                return render_template('recover.html',error="Email field must not be empty!")
+
+            #Search database for email
+            for user in User.query.all():
+                #Check if emails match
+                if(crypt.decrypt(user.email) == email):
+                    user_found = True
+                    
+                    #Try to send email
+                    link = request.host_url + 'reset/' + user.user_name
+
+                    print("\nLink: " + str(link) + "\n")
+                    
+                    if(utils.sendResetLink(email,link) == True):
+                        #Notify user
+                        status_msg = "A password reset link has been sent to your email"
+                        return render_template('status.html',status=status_msg)
+
+            #No user's found with that email
+            if user_found == False:
+                err_msg = "An error occured while trying to send reset link\nPlease ensure the email you entered is correct."
+                return render_template('recover.html',error=err_msg)
+                                           
+    return render_template('recover.html', error="")
+
+#Set new password
+@app.route('/reset/<token>', methods=["GET","POST"])
+def reset_password(token):
+    return render_template('reset_password.html')
 
 app.run(host=os.getenv('IP', '127.0.0.1'),port=int(os.getenv('PORT', 5000)),debug=True)
 
