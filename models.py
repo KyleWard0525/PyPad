@@ -8,11 +8,14 @@ class Note(db.Model):
     title = db.Column("title", db.String(200))
     text = db.Column("text", db.String(100))
     date = db.Column("date", db.String(50))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    comments = db.relationship("Comment", backref="note_comment", cascade="all, delete-orphan", lazy=True)
 
-    def __init__(self, title, text, date):
+    def __init__(self, title, text, date, user_id):
         self.title = title
         self.text = text
         self.date = date
+        self.user_id = user_id
 
 
 class User(db.Model):
@@ -20,6 +23,8 @@ class User(db.Model):
     user_name = db.Column("name", db.String(100))
     email = db.Column("email", db.String(100))
     password = db.Column("password", db.String(200))
+    notes = db.relationship("Note", backref="user", lazy=True)
+    comments = db.relationship("Comment", backref="user", lazy=True)
 
     def __init__(self, name, email, password):
         self.user_name = name
