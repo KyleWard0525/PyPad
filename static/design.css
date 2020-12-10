@@ -74,9 +74,19 @@ a.login_notice {
 	display: block;
 }
 
+.nav_bar {
+	--fill-color: purple;
+	display: block;
+	position: static;
+	text-transform: uppercase;
+	
+}
+
 .nav_button {
 	color: white;
 	background: purple;
+	border-style: solid;
+	border-width: thin;
 	margin-left: 5px;
 	margin-right: 5px;
 	text-align: center;
@@ -87,5 +97,10 @@ a.login_notice {
 .nav_button:hover {
 	background-color: silver;
 	color: purple;
-	font-weight: bold;
+	text-decoration: underline overline;
+}
+
+.note_table {
+	align: center;
+	text-align: center;
 }
