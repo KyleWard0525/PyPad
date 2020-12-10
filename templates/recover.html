@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
 	</head>
 	<body>
-	<nav>
+		<nav>
 		<a href="{{url_for('index')}}" class="nav_button">Home</a> ||
 		<a href="{{url_for('get_notes')}}" class="nav_button"><u>My notes</u></a> ||
 		<a href="{{url_for('new_note')}}" class="nav_button"><u>Create new note</u></a> ||
@@ -20,22 +20,23 @@
 		<a href="{{url_for('login')}}" class="nav_button">Login</a> 
 		{% endif %}
 		</nav>
-	<main>
-
-		<h1 class="welcome">Welcome {{user}} to PyPad</h1>
-		<h2 class="signup_prompt">Don't have an account? Sign up here!</h2>
 		
-		<button class="ca_button"><a href="{{url_for('createAccount')}}" style="color:white; text-decoration: none;">Create Account</a></button>
-		<a href="{{url_for('login')}}" class="login_notice">Already have an account? Login here</a>
+		<h1 class="welcome">Forgot Password</h1>
 		
-		<p>
-			Feel free to use PyPad to create notes for any short notes for school, projects, etc. If you are new to
-			PyPad, then click on 'Create Account' to set up an account. If not a new user, then click on 'Login'
-			login into your account. You can view your notes or create a note if you're already signed in.
-		</p>
-	</main>
-	<footer>
-		Copyright 2020 by Python Cobra
-	</footer>
+		<form action="recover" method="post">
+		<p><label>Enter your email address: </label><input type="email" name="email"></p>
+		<p><input type="submit" value="Send reset link"</p>
+		</form>
+		<br>
+		<br>
+		<p>If there is an account associated with that email, we will send a link
+		to reset your password.</p>
+	
+	
+		<h1 class="error">{{error}}</h1>
+	
+		<footer>
+		Copyright 2020 by Python Cobra Software LLC. All rights reserved.
+		</footer>
 	</body>
 	</html>

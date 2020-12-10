@@ -1,9 +1,21 @@
 import sys
 import time
 import re
+import smtplib #SMTP (Secure Mail Transfer Protocol) for sending emails
+import email as Email
 from models import User as User
+from email_validator import validate_email
 
 special_chars = "!@#$%&_=./\()*^-+{}:;<>|[]`~"
+
+#Start SMTP server
+smtp = smtplib.SMTP('smtp.gmail.com', 587)
+smtp.starttls()
+smtp.ehlo()
+
+#Login to PyPad email via smtp
+smtp.login("PyPadTeam@gmail.com", "PyPadSupport123!")
+    
 
 """
 Function to validate password strength
@@ -60,6 +72,28 @@ def checkPasswordStrength(password):
     
     return reply
 
+
+#Send a password reset link to email
+def sendResetLink(email,link):
+    #Create message object
+    msg = Email.message.EmailMessage()
+
+    #Compose email
+    msg['from'] = "PyPadTeam@gmail.com"
+    msg['to'] = email
+    msg['Subject'] = "PyPad Password Reset Link"
+    msg.set_content("Click link to reset your password: " + link)
+
+    #Try to send email
+    result = smtp.send_message(msg)
+
+    #Check if email was sent
+    if not bool(result):
+        print("\nEmail sent\n")
+        return True
+
+    print("\nEmail not sent\n")
+    return False
                  
 #Clear database of all users
 def wipeDatabase(db):

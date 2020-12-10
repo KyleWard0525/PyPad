@@ -8,19 +8,26 @@
         <title>PyPad - New Note</title>
         <!-- styles -->
         <link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
+        <script src="https://cdn.ckeditor.com/4.15.1/standard-all/ckeditor.js">//for rich text</script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+            $( function() {
+                $( ".container input[type=submit]" ).button();
+                $( "input" ).click( function( event ) {
+                    event.preventDefault();
+                } );
+            } );
+        </script>
     </head>
     <body>
-       <nav>
-           <!--  add navigation links -->
-           <a href="{{url_for('index')}}">Home</a> ||
-           <a href="{{url_for('createAccount')}}">Create Account</a> ||
-	        <a href="{{url_for('login')}}">Login</a> ||
-	        <a href="{{url_for('get_notes')}}"><u>My notes</u></a> ||
-	        <a href="{{url_for('new_note')}}"><u>Create new note</u></a>
-       </nav>
-
-        <h1>Welcome {{user.user_name}} to the PyPad!</h1>
-
+    <nav>
+		<a href="{{ url_for('index') }}"> Home</a> ||
+		<a href="{{ url_for('get_notes') }}"> My Notes</a> ||
+		<a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+    <main>
+        <h1>Welcome {{user}} to the PyPad!</h1>
+        <div class="container">
        {% if note %}
             <form action="{{ url_for('update_note', note_id=note.id) }}" method="post">
        {% else %}
@@ -31,7 +38,7 @@
             <input type="text" name="title" value="{% if note %}{{note.title}} {% endif %}"/></p>
             <p><label>Note </label></p>
             <p>
-                <textarea name="noteText"  rows="6" cols="0" >
+                <textarea name="noteText" id="noteText"  rows="6" cols="0" >
                     {% if note %}
                         {{ note.text }}
                     {% else %}
@@ -39,6 +46,9 @@
                     {% endif %}
 
                 </textarea>
+                <script>
+                    CKEDITOR.replace('noteText');
+                </script>
 
             </p>
             <p>
@@ -50,5 +60,7 @@
             </p>
         </form>
         </form>
+        </div>
+    </main>
     </body>
 </html>
