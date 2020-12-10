@@ -74,11 +74,18 @@ a.login_notice {
 	display: block;
 }
 
-a.nav_button {
+.nav_button {
 	color: white;
 	background: purple;
 	margin-left: 5px;
 	margin-right: 5px;
 	text-align: center;
 	padding: 10px 10px 10px 10px;
+	transition-duration: 0.4s;
+}
+
+.nav_button:hover {
+	background-color: silver;
+	color: purple;
+	font-weight: bold;
 }
