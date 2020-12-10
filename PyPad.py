@@ -1,5 +1,3 @@
-# FLASK Tutorial 1 -- We show the bare bones code to get an app up and running
-
 # imports
 import os                 # os is used to get environment variables IP & PORT
 import sys
@@ -35,10 +33,13 @@ app.config['SECRET_KEY'] = 'SE3155'
 #Connect the database object to the flask app
 db.init_app(app)
 
+
+#Current user token
+token = None
+
 #Setup models
 with app.app_context():
     db.create_all() #run under app context
-
 
 # @app.route is a decorator. It gives the function "index" special powers.
 # In this case it makes it so anyone going to "your-url/" makes this function
@@ -62,8 +63,6 @@ def get_notes():
     else:
         #Redirect to login page
         return redirect(url_for('login'))
-
-    
 
 @app.route('/notes/<note_id>')
 def get_note(note_id):
@@ -147,6 +146,7 @@ def update_note(note_id):
     else:
         return redirect(url_for('login'))
 
+
 #Create account page
 @app.route('/createAccount', methods=["GET", "POST"])
 def createAccount():
@@ -220,6 +220,7 @@ def login():
 
     return render_template("login.html", error="")
 
+#Logout the user
 @app.route('/logout')
 def logout():
     # check if a user is saved in session
@@ -228,6 +229,105 @@ def logout():
 
     return redirect(url_for('index'))
 
+#Send password recover link to email
+@app.route('/recover', methods=["GET","POST"])
+def recover():
+    global token
+    user_found = False
+    
+    #Check if user exists
+    if session.get('user'):
+        return redirect(url_for('index'))
+    else:
+        #Check method type
+        if request.method == "POST":
+            #Get email from text field
+            email = request.form['email']
+
+            if email == "":
+                return render_template('recover.html',error="Email field must not be empty!")
+
+            #Search database for email
+            for user in User.query.all():
+                #Check if emails match
+                if(crypt.decrypt(user.email) == email):
+                    user_found = True
+                    
+                    #Try to send email
+                    link = request.host_url + 'reset_password/' + user.user_name
+                    token = user.user_name
+
+                    print("\nLink: " + str(link) + "\n")
+                    
+                    if(utils.sendResetLink(email,link) == True):
+                        #Notify user
+                        status_msg = "A password reset link has been sent to your email"
+                        return render_template('status.html',status=status_msg)
+
+            #No user's found with that email
+            if user_found == False:
+                err_msg = "An error occured while trying to send reset link\nPlease ensure the email you entered is correct."
+                return render_template('recover.html',error=err_msg)
+                                           
+    return render_template('recover.html', error="")
+
+#Set new password
+@app.route('/reset_password/<token>', methods=["GET","POST"])
+def reset_password(token):
+
+    print("\nToken: " + str(token) + "\n")
+
+    #Get user object from database
+    user = db.session.query(User).filter_by(user_name=token).first()
+
+    #Get old password
+    oldPW = user.password
+
+    #Set session user
+    session['user'] = token
+    session['user_id'] = user.id
+
+    #Check request type
+    if request.method == "POST":
+        newPw = request.form['newPW']
+        conf_newPW = request.form['conf_newPW']
+
+        #Check that new password is not old password
+        if request.form['newPW'] == crypt.decrypt(oldPW):
+            return render_template('reset_password.html', token=token, error="New password can not be the same as a previously used password!")
+
+        #Check password strength
+        if utils.checkPasswordStrength(request.form['newPW']) == "OK":
+            #Check that the passwords match
+            if request.form['newPW'] == conf_newPW:
+                #Reset password
+                user.password=crypt.encrypt(request.form['newPW'])
+                db.session.add(user)
+                db.session.commit()
+
+                #Ensure password was changed
+                if crypt.decrypt(user.password) != crypt.decrypt(oldPW):
+                    #Success
+                    return render_template('status.html', token=token, status="Your password has been successfully reset!")
+                #Password was not changed for some reason
+                else:
+                    return render_template('reset_password.html', token=token, error="An unknown error occured while trying to reset your password. Please try again.")
+            #Passwords dont match
+            else:
+                return render_template('reset_password.html', token=token, error="Password fields do not match!")
+        #Password doesn't meet the strength reqs
+        else:
+            return render_template('reset_password.html', token=token, error=utils.checkPasswordStrength(request.form['newPW']))
+    
+    return render_template('reset_password.html', token=token, error="")
+
+def getToken():
+    global token
+
+    if token != None:
+        return token
+    else:
+        return False
 
 app.run(host=os.getenv('IP', '127.0.0.1'),port=int(os.getenv('PORT', 5000)),debug=True)
 
