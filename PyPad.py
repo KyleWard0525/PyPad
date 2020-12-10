@@ -274,9 +274,6 @@ def recover():
 #Set new password
 @app.route('/reset_password/<token>', methods=["GET","POST"])
 def reset_password(token):
-
-    print("\nToken: " + str(token) + "\n")
-
     #Get user object from database
     user = db.session.query(User).filter_by(user_name=token).first()
 
