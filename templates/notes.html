@@ -13,12 +13,16 @@
 
 
     <nav>
-		<a href="{{url_for('index')}}">Home</a> ||
-	    <a href="{{url_for('createAccount')}}">Create Account</a> ||
-	    <a href="{{url_for('login')}}">Login</a> ||
-	    <a href="{{url_for('get_notes')}}"><u>My notes</u></a> ||
-	    <a href="{{url_for('new_note')}}"><u>Create new note</u></a>
-	</nav>
+		<a href="{{url_for('index')}}" class="nav_button">Home</a> ||
+		<a href="{{url_for('get_notes')}}" class="nav_button"><u>My notes</u></a> ||
+		<a href="{{url_for('new_note')}}" class="nav_button"><u>Create new note</u></a> ||
+		{% if user %}
+        <a href="{{ url_for('logout') }}" class="nav_button"> Logout</a> 
+		{% else %}
+		<a href="{{url_for('createAccount')}}" class="nav_button">Create Account</a> ||
+		<a href="{{url_for('login')}}" class="nav_button">Login</a> 
+		{% endif %}
+		</nav>
 
         <h1>{{user}}'s notes</h1>
         <p>
