@@ -12,30 +12,26 @@
         <title>PyPad - View your Note</title>
 
         <!-- styles -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
     </head>
     <body>
 
-        <h1><u>Note:</u></h1>
-
-        <h1><u>Note:</u></h1>
-
-       <nav>
+		 <nav>
 		<a href="{{url_for('index')}}">Home</a> ||
 	    <a href="{{url_for('createAccount')}}">Create Account</a> ||
 	    <a href="{{url_for('login')}}">Login</a> ||
 	    <a href="{{url_for('get_notes')}}"><u>My notes</u></a> ||
 	    <a href="{{url_for('new_note')}}"><u>Create new note</u></a>
         </nav>
-        <h1>Welcome {{user.name}} to PyPad!</h1>
-            <h1>Note detials</h1>
+
+      
+            <h1>Note detials: </h1>
 
         <table>
             <tr>
                 <th>Title</th>
                 <th>Text</th>
                 <th>Date</th>
-				<th>Comments</th>
 				<th>Comments</th>
             </tr>
             <tr>

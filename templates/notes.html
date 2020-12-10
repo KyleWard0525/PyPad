@@ -7,7 +7,7 @@
         <link rel="shortcut icon" type="image/png" href="../images/icon.png">
         <title>PyPad - View your Notes</title>
         <!-- styles -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
     </head>
     <body>
 
@@ -20,8 +20,7 @@
 	    <a href="{{url_for('new_note')}}"><u>Create new note</u></a>
 	</nav>
 
-        <h1>Welcome {{user.user_name}} to PyPad!</h1>
-        <h1>Listing notes</h1>
+        <h1>{{user}}'s notes</h1>
         <p>
             Below are your notes that you have created listed by the date they were made. View, edit or delete any of
             your notes.
