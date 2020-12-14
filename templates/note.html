@@ -16,15 +16,14 @@
     </head>
     <body>
 
-		 <nav>
+    <nav>
 		<a href="{{url_for('index')}}">Home</a> ||
 	    <a href="{{url_for('createAccount')}}">Create Account</a> ||
 	    <a href="{{url_for('login')}}">Login</a> ||
 	    <a href="{{url_for('get_notes')}}"><u>My notes</u></a> ||
 	    <a href="{{url_for('new_note')}}"><u>Create new note</u></a>
-        </nav>
-
-      
+    </nav>
+    <main>
             <h1>Note details: </h1>
 
         <table>
@@ -36,10 +35,14 @@
             </tr>
             <tr>
                 <td>{{ note.title }}</td>
-                <td>{{ note.text }}</td>
+                <td>{{ note.text|safe }}</td>
                 <td>{{ note.date }}</td>
-				<td>{{ note.comments }}</td>
+				<td>{{ note.comments|safe }}</td>
             </tr>
         </table>
+    </main>
+    <footer>
+		Copyright 2020 by Python Cobra Software LLC. All rights reserved.
+	</footer>
     </body>
 </html>

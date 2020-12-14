@@ -29,13 +29,16 @@
 		<a href="{{url_for('login')}}" class="login_notice">Already have an account? Login here</a>
 		
 		<p>
-			Feel free to use PyPad to create notes for any short notes for school, projects, etc. If you are new to
+			Feel free to use PyPad to create notes for any short notes for school, projects, etc.
+			{% if not user %} If you are new to
 			PyPad, then click on 'Create Account' to set up an account. If not a new user, then click on 'Login'
-			login into your account. You can view your notes or create a note if you're already signed in.
+			login into your account.
+			{% endif %}
+			You can view your notes or create a note if you're already signed in.
 		</p>
 	</main>
 	<footer>
-		Copyright 2020 by Python Cobra
+		Copyright 2020 by Python Cobra Software LLC. All rights reserved.
 	</footer>
 	</body>
 	</html>
