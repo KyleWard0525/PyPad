@@ -21,9 +21,9 @@
     </head>
     <body>
     <nav>
-		<a href="{{ url_for('index') }}"> Home</a> ||
-		<a href="{{ url_for('get_notes') }}"> My Notes</a> ||
-		<a href="{{ url_for('logout') }}">Logout</a>
+		<a href="{{ url_for('index') }}" class="nav_button"> Home</a> ||
+		<a href="{{ url_for('get_notes') }}" class="nav_button"> My Notes</a> ||
+		<a href="{{ url_for('logout') }}" class="nav_button">Logout</a>
     </nav>
     <main>
         <h1>Welcome {{user}} to the PyPad!</h1>

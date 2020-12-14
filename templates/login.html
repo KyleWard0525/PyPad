@@ -9,11 +9,11 @@
 		<link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
 	</head>
 	<body>
-	<a href="{{url_for('index')}}">Home</a> ||
-	<a href="{{url_for('createAccount')}}">Create Account</a> ||
-	<a href="{{url_for('login')}}">Login</a> ||
-	<a href="{{url_for('get_notes')}}"><u>My notes</u></a> ||
-	<a href="{{url_for('new_note')}}"><u>Create new note</u></a>
+	<a href="{{url_for('index')}}" class="nav_button">Home</a> ||
+	<a href="{{url_for('createAccount')}}" class="nav_button">Create Account</a> ||
+	<a href="{{url_for('login')}}" class="nav_button">Login</a> ||
+	<a href="{{url_for('get_notes')}}" class="nav_button"><u>My notes</u></a> ||
+	<a href="{{url_for('new_note')}}" class="nav_button"><u>Create new note</u></a>
 	<main>
 		<h1><b>Fill in login information</b></h1>
 		<p>If you don't have an account on PyPad, then click on 'Create Account' to create your account.</p>
