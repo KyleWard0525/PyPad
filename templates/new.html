@@ -20,7 +20,11 @@
         </script>
     </head>
     <body>
+<<<<<<< HEAD
     <nav class="nav_bar">
+=======
+    <nav>
+>>>>>>> master
 		<a href="{{ url_for('index') }}" class="nav_button"> Home</a> ||
 		<a href="{{ url_for('get_notes') }}" class="nav_button"> My Notes</a> ||
 		<a href="{{ url_for('logout') }}" class="nav_button">Logout</a>
@@ -49,7 +53,6 @@
                 <script>
                     CKEDITOR.replace('noteText');
                 </script>
-
             </p>
             <p>
                 {% if note %}
@@ -62,5 +65,8 @@
         </form>
         </div>
     </main>
+    <footer>
+		Copyright 2020 by Python Cobra Software LLC. All rights reserved.
+	</footer>
     </body>
 </html>

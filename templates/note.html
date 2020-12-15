@@ -16,6 +16,7 @@
     </head>
     <body>
 
+<<<<<<< HEAD
 		 <nav class="nav_bar">
 		<a href="{{url_for('index')}}" class="nav_button">Home</a> ||
 		<a href="{{url_for('get_notes')}}" class="nav_button"><u>My notes</u></a> ||
@@ -30,6 +31,17 @@
 
       
             <h1>Note detials: </h1>
+=======
+    <nav>
+		<a href="{{url_for('index')}}" class="nav_button">Home</a> ||
+	    <a href="{{url_for('createAccount')}}" class="nav_button">Create Account</a> ||
+	    <a href="{{url_for('login')}}" class="nav_button">Login</a> ||
+	    <a href="{{url_for('get_notes')}}" class="nav_button"><u>My notes</u></a> ||
+	    <a href="{{url_for('new_note')}}" class="nav_button"><u>Create new note</u></a>
+    </nav>
+    <main>
+            <h1>Note details: </h1>
+>>>>>>> master
 
         <table>
             <tr>
@@ -41,9 +53,45 @@
             <tr>
                 <td>{{ note.title }}</td>
                 <td>{{ note.text }}</td>
-                <td>{{ note.date }}</td>
-				<td>{{ note.comments }}</td>
+                <td>{{ note.date }}</td
             </tr>
         </table>
+<<<<<<< HEAD
+=======
+				
+				{% if note.comments %}
+					{% if note.comments | length > 0 %}
+						<h2>Comments</h2>
+						<ul>
+						{% for comment in note.comments %}
+							<form action="{{url_for('delete_comment', note_id=note.id, comment_id=comment.id)}}", method="post">
+							<li>{{comment.text}}  :  {{comment.date}}    :     
+							<input type="submit" value="Delete Comment"</li>
+							</form>
+						{% endfor %}
+						</ul>
+					{% endif %}
+				{% endif %}
+				
+		<form action="{{ url_for('new_comment', note_id=note.id)}}", method="post">
+		<h2>Add a comment</h2>
+		<br>
+		<textarea name="commentText" rows="6" cols="0">
+			Add your new comment here..
+		</textarea>
+		<br>
+		<input type="submit" value="Add Comment"/>
+		</form>
+
+                <td>{{ note.text|safe }}</td>
+                <td>{{ note.date }}</td>
+				<td>{{ note.comments|safe }}</td>
+            </tr>
+        </table>
+    </main>
+    <footer>
+		Copyright 2020 by Python Cobra Software LLC. All rights reserved.
+	</footer>
+>>>>>>> master
     </body>
 </html>

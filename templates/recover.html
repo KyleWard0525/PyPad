@@ -20,24 +20,28 @@
 		<a href="{{url_for('login')}}" class="nav_button">Login</a> 
 		{% endif %}
 		</nav>
-		
-		<h1 class="welcome">Forgot Password</h1>
-		
-		<form action="recover" method="post">
-		<p><label>Enter your email address: </label><input type="email" name="email"></p>
-		<p><input type="submit" value="Send reset link"</p>
-		</form>
-		<br>
-		<br>
-		<p>If there is an account associated with that email, we will send a link
-		to reset your password.</p>
-	
-	
-		<h1 class="error">{{error}}</h1>
-	
+		<main>
+			<h1 class="welcome">Forgot Password</h1>
+
+			<form action="recover" method="post">
+			<p><label>Enter your email address: </label><input type="email" name="email"></p>
+			<p><input type="submit" value="Send reset link"></p>
+			</form>
+			<br>
+			<br>
+			<p>If there is an account associated with that email, we will send a link
+			to reset your password.</p>
+
+
+			<h1 class="error">{{error}}</h1>
+		</main>
 		<footer>
 		Copyright 2020 by Python Cobra Software LLC. All rights reserved.
 		</footer>
 	</body>
+<<<<<<< HEAD
 	
 	</html>
+=======
+	</html>
+>>>>>>> master
