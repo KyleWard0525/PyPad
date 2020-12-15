@@ -16,7 +16,6 @@
     </head>
     <body>
 
-<<<<<<< HEAD
 		 <nav class="nav_bar">
 		<a href="{{url_for('index')}}" class="nav_button">Home</a> ||
 		<a href="{{url_for('get_notes')}}" class="nav_button"><u>My notes</u></a> ||
@@ -31,7 +30,6 @@
 
       
             <h1>Note detials: </h1>
-=======
     <nav>
 		<a href="{{url_for('index')}}" class="nav_button">Home</a> ||
 	    <a href="{{url_for('createAccount')}}" class="nav_button">Create Account</a> ||
@@ -41,7 +39,6 @@
     </nav>
     <main>
             <h1>Note details: </h1>
->>>>>>> master
 
         <table>
             <tr>
@@ -56,8 +53,6 @@
                 <td>{{ note.date }}</td
             </tr>
         </table>
-<<<<<<< HEAD
-=======
 				
 				{% if note.comments %}
 					{% if note.comments | length > 0 %}
@@ -92,6 +87,5 @@
     <footer>
 		Copyright 2020 by Python Cobra Software LLC. All rights reserved.
 	</footer>
->>>>>>> master
     </body>
 </html>
