@@ -16,16 +16,15 @@
     </head>
     <body>
 
-		 <nav>
-		<a href="{{url_for('index')}}">Home</a> ||
-	    <a href="{{url_for('createAccount')}}">Create Account</a> ||
-	    <a href="{{url_for('login')}}">Login</a> ||
-	    <a href="{{url_for('get_notes')}}"><u>My notes</u></a> ||
-	    <a href="{{url_for('new_note')}}"><u>Create new note</u></a>
-        </nav>
-
-      
-            <h1>Note detials: </h1>
+    <nav>
+		<a href="{{url_for('index')}}" class="nav_button">Home</a> ||
+	    <a href="{{url_for('createAccount')}}" class="nav_button">Create Account</a> ||
+	    <a href="{{url_for('login')}}" class="nav_button">Login</a> ||
+	    <a href="{{url_for('get_notes')}}" class="nav_button"><u>My notes</u></a> ||
+	    <a href="{{url_for('new_note')}}" class="nav_button"><u>Create new note</u></a>
+    </nav>
+    <main>
+            <h1>Note details: </h1>
 
         <table>
             <tr>
@@ -36,6 +35,7 @@
             </tr>
             <tr>
                 <td>{{ note.title }}</td>
+<<<<<<< HEAD
                 <td>{{ note.text }}</td>
                 <td>{{ note.date }}</td
             </tr>
@@ -65,5 +65,16 @@
 		<input type="submit" value="Add Comment"/>
 		</form>
 
+=======
+                <td>{{ note.text|safe }}</td>
+                <td>{{ note.date }}</td>
+				<td>{{ note.comments|safe }}</td>
+            </tr>
+        </table>
+    </main>
+    <footer>
+		Copyright 2020 by Python Cobra Software LLC. All rights reserved.
+	</footer>
+>>>>>>> 8d9457778be8425ed9521fc9303483126661411e
     </body>
 </html>

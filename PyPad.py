@@ -78,7 +78,7 @@ def get_note(note_id):
     
 
 #App route to view new note page
-@app.route('/notes/new_note', methods=["GET", "POST"])
+@app.route('/notes/new', methods=["GET", "POST"])
 def new_note():
     
     if session.get('user'):
