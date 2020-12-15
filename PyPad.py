@@ -9,6 +9,7 @@ from database import db
 from datetime import date
 from models import Note as Note
 from models import User as User
+from models import Comment as Comment
 from crypto import Crypto
 
 
@@ -317,6 +318,38 @@ def reset_password(token):
             return render_template('reset_password.html', token=token, error=utils.checkPasswordStrength(request.form['newPW']))
     
     return render_template('reset_password.html', token=token, error="")
+
+
+#Add comment to note
+@app.route('/notes/<note_id>/comment', methods=["POST"])
+def new_comment(note_id):
+    if session.get("user"):
+        text = request.form["commentText"]
+        user_id = session['user_id']
+        today = date.today().strftime("%m-%d-%Y")
+        comment = Comment(text, today, note_id, user_id)
+
+        #Add comment to database
+        db.session.add(comment)
+        db.session.commit()
+
+        return redirect(url_for("get_note", note_id=note_id))
+    else:
+        return redirect(url_for("login"))
+
+#Delete comment from note
+@app.route('/notes/<note_id>/<comment_id>', methods=["GET","POST"])
+def delete_comment(note_id, comment_id):
+    if session.get('user'):
+        comment = db.session.query(Comment).filter_by(id=comment_id).first()
+
+        db.session.delete(comment)
+        db.session.commit()
+
+        return redirect(url_for("get_note", note_id=note_id))
+    else:
+        return redirect(url_for("login"))
+        
 
 def getToken():
     global token
