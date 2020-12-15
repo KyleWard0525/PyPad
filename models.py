@@ -55,6 +55,5 @@ class Comment(db.Model):
     def __init__(self,text,date,note_id,user_id):
         self.text = text
         self.date = date
-        self.parent_id = parent
         self.note_id = note_id
         self.user_id = user_id
