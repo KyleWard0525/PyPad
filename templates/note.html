@@ -37,19 +37,33 @@
             <tr>
                 <td>{{ note.title }}</td>
                 <td>{{ note.text }}</td>
-                <td>{{ note.date }}</td>
-				<td>{{ note.comments }}</td>
+                <td>{{ note.date }}</td
             </tr>
         </table>
-    </body>
-</html>
-				<td>{{ note.comments }}</td>
-            </tr>
-        </table>
-    </body>
-</html>
+				
+				{% if note.comments %}
+					{% if note.comments | length > 0 %}
+						<h2>Comments</h2>
+						<ul>
+						{% for comment in note.comments %}
+							<form action="{{url_for('delete_comment', note_id=note.id, comment_id=comment.id)}}", method="post">
+							<li>{{comment.text}}  :  {{comment.date}}    :     
+							<input type="submit" value="Delete Comment"</li>
+							</form>
+						{% endfor %}
+						</ul>
+					{% endif %}
+				{% endif %}
+				
+		<form action="{{ url_for('new_comment', note_id=note.id)}}", method="post">
+		<h2>Add a comment</h2>
+		<br>
+		<textarea name="commentText" rows="6" cols="0">
+			Add your new comment here..
+		</textarea>
+		<br>
+		<input type="submit" value="Add Comment"/>
+		</form>
 
-            </tr>
-        </table>
     </body>
 </html>
