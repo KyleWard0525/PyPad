@@ -45,27 +45,6 @@ h1.status_msg {
 	font-family: "Courier New";
 }
 
-.ca_button {
-	color: white;
-	background-color: purple;
-	border-style: double;
-	display: inline-block;
-	font-size: 24px;
-	font-family: "Courier New";
-	text-align: center;
-	cursor: pointer;
-	width: 250px;
-	height: 70px;
-	margin-bottom: 30px;
-	transition-duration: 0.4s;
-}
-
-.ca_button:hover {
-	background-color: silver;
-	color: purple;
-	font-weight: bold;
-}
-
 a.login_notice {
 	padding: 1px 1px 1px 1px;
 	margin: 2px;
@@ -138,11 +117,23 @@ a.login_notice {
 
 .text_area {
 	box-sizing: border-box;
-	border: 5px purple;
+	border: 2px solid purple;
 	border-radius: 5px;
-	margin: 10px 10px 10px 10px;
+	margin: 10px 10px 25px 10px;
 	resize: none;
 	width: 50%;
-	height: 250px;
-	
+	height: 200px;
+	text-align: center;
+	background-color: silver;
+}
+
+.text_area:focus {
+	border: 3px solid purple;
+}
+
+#ca.basic_button {
+	font-size: 24px;
+	padding: 24px 64px;
+	margin-top: 10px;
+	margin-bottom: 15px;
 }
