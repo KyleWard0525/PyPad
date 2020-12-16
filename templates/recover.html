@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="PyPad Literary Development">
-		<link rel="shortcut icon" type="image/png" href="../images/icon.png">
+		<link rel="shortcut icon" type="image/png" href="static/icon.png">
 		<title>PyPad Home</title>
 		<link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
 	</head>
@@ -25,7 +25,7 @@
 
 			<form action="recover" method="post">
 			<p><label>Enter your email address: </label><input type="email" name="email"></p>
-			<p><input type="submit" value="Send reset link"></p>
+			<p><input type="submit" value="Send reset link" class="basic_button"></p>
 			</form>
 			<br>
 			<br>
@@ -39,4 +39,5 @@
 		Copyright 2020 by Python Cobra Software LLC. All rights reserved.
 		</footer>
 	</body>
+	
 	</html>

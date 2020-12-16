@@ -45,27 +45,6 @@ h1.status_msg {
 	font-family: "Courier New";
 }
 
-.ca_button {
-	color: white;
-	background-color: purple;
-	border-style: double;
-	display: inline-block;
-	font-size: 24px;
-	font-family: "Courier New";
-	text-align: center;
-	cursor: pointer;
-	width: 250px;
-	height: 70px;
-	margin-bottom: 30px;
-	transition-duration: 0.4s;
-}
-
-.ca_button:hover {
-	background-color: silver;
-	color: purple;
-	font-weight: bold;
-}
-
 a.login_notice {
 	padding: 1px 1px 1px 1px;
 	margin: 2px;
@@ -74,11 +53,100 @@ a.login_notice {
 	display: block;
 }
 
-a.nav_button {
+.nav_bar {
+	--fill-color: purple;
+	display: block;
+	position: static;
+	text-transform: uppercase;
+	
+}
+
+.nav_button {
 	color: white;
 	background: purple;
+	border-style: solid;
+	border-width: thin;
 	margin-left: 5px;
 	margin-right: 5px;
 	text-align: center;
 	padding: 10px 10px 10px 10px;
+	transition-duration: 0.4s;
+}
+
+.nav_button:hover {
+	background-color: silver;
+	color: purple;
+	text-decoration: underline overline;
+}
+
+.note_table {
+	align: center;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 150px;
+}
+
+.basic_button {
+	font-size: 14px;
+	padding: 8px 28px;
+	border-radius: 10px;
+	background-color: purple;
+	color: white;
+	border: 2px solid white;
+	transition-duration: 0.4s;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+
+.basic_button:hover {
+	background-color: silver;
+	color: purple;
+	cursor: pointer;
+}
+
+#note_entry {
+	align: center;
+	text-align: left;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 50px;
+	margin-bottom: 55px;
+}
+
+.text_area {
+	box-sizing: border-box;
+	border: 2px solid purple;
+	border-radius: 5px;
+	margin: 10px 10px 25px 10px;
+	resize: none;
+	width: 50%;
+	height: 200px;
+	text-align: center;
+	background-color: silver;
+}
+
+.text_area:focus {
+	border: 3px solid purple;
+}
+
+#ca.basic_button {
+	font-size: 24px;
+	padding: 24px 64px;
+	margin-top: 10px;
+	margin-bottom: 15px;
+}
+
+img {
+height: 564px;
+width: 817px;
+}
+
+footer.homepage_footer {
+margin-top: 0px;
+}
+
+footer.note_footer {
+margin-top: 350px;
 }

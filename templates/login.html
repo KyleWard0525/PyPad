@@ -4,23 +4,27 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="PyPad Literary Development">
-		<link rel="shortcut icon" type="image/png" href="../images/icon.png">
+		<link rel="shortcut icon" type="image/png" href="static/icon.png">
 		<title>PyPad Log in</title>
 		<link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
 	</head>
 	<body>
+	<nav class="nav_bar">
 	<a href="{{url_for('index')}}" class="nav_button">Home</a> ||
 	<a href="{{url_for('createAccount')}}" class="nav_button">Create Account</a> ||
 	<a href="{{url_for('login')}}" class="nav_button">Login</a> ||
 	<a href="{{url_for('get_notes')}}" class="nav_button"><u>My notes</u></a> ||
 	<a href="{{url_for('new_note')}}" class="nav_button"><u>Create new note</u></a>
+
+	</nav>
+
 	<main>
 		<h1><b>Fill in login information</b></h1>
 		<p>If you don't have an account on PyPad, then click on 'Create Account' to create your account.</p>
         <form action="login" method="post">
             <p><label>Enter username:</label><input type="text" name="username"></p>
             <p><label>Enter password:</label><input type="password" name="password"></p>
-            <p><input type="submit" value="Login"></p>
+            <p><input type="submit" value="Login" class="basic_button"></p>
         </form>
 		<label><a href="{{url_for('recover')}}">Forgot password?</a></label>
 		<h1 class="error">{{error}}</h1>
