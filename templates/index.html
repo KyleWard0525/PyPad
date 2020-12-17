@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="PyPad Literary Development">
-		<link rel="shortcut icon" type="image/png" href="../images/icon.png">
+		<link rel="shortcut icon" type="image/png" href="static/icon.png">
 		<title>PyPad Home</title>
 		<link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
 	</head>
@@ -36,9 +36,10 @@
 			{% endif %}
 			You can view your notes or create a note if you're already signed in.
 		</p>
+		<img src="static/icon.png" alt="PyPad Logo">
 	
 	</main>
-	<footer>
+	<footer class="homepage_footer">
 		Copyright 2020 by Python Cobra Software LLC. All rights reserved.
 	</footer>
 	</body>

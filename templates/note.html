@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="UNCC Notes App">
-        <link rel="shortcut icon" type="image/png" href="../images/icon.png">
+        <link rel="shortcut icon" type="image/png" href="static/icon.png">
         <title>Pypad - Note</title>
         <meta name="description" content="UNCC Notes App">
         <title>Pypad - Note</title>
@@ -33,15 +33,18 @@
 
         <table id="note_entry">
             <tr>
-                <th>Title</th>
-                <th>Text</th>
-                <th>Date</th>
+                <th>Title:</th>
+                <h3><td>{{ note.title }}</td></h3>
             </tr>
             <tr>
-                <h3><td>{{ note.title }}</td></h3>
+                <th>Text:</th>
                 <td>{{ note.text }}</td>
-                <td>{{ note.date }}</td
             </tr>
+            <tr>
+                <th>Date:</th>
+                 <td>{{ note.date }}</td
+            </tr>
+
         </table>
 				
 				{% if note.comments %}
