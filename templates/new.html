@@ -38,7 +38,7 @@
            <p><label>Title </label></p><p>
             <input type="text" name="title" value="{% if note %}{{note.title}} {% endif %}"/></p>
             <p><label>Note </label></p>
-            <p>
+            <div>
                 <textarea class="text_area" name="noteText" id="noteText"  rows="6" cols="0" >
                     {% if note %}
                         {{ note.text }}
@@ -50,7 +50,7 @@
                 <script>
                     CKEDITOR.replace('noteText');
                 </script>
-            </p>
+            </div>
             <p>
                 {% if note %}
                     <input type="submit" value="Update Note" class="basic_button"/>
